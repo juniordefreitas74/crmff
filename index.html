@@ -13,7 +13,16 @@
       --card-p-comprar: #1e3a8a; --card-comprado: #064e3b; --card-producao: #78350f; --card-produzido: #422006; --card-reagendado: #7c2d12;
     }
     body { font-family: 'Poppins', sans-serif; background-color: var(--bg-body); color: var(--text-main); margin: 0; padding: 20px 10px; transition: all 0.3s ease; }
-    .container { max-width: 1400px; margin: 0 auto; position: relative; }
+    
+    /* LOGIN SCREEN */
+    #loginScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-body); z-index: 10000; display: flex; align-items: center; justify-content: center; }
+    .login-box { background: var(--bg-card); padding: 40px; border-radius: 30px; box-shadow: 0 10px 30px var(--shadow); width: 90%; max-width: 400px; text-align: center; border: 1px solid var(--border-color); }
+    .login-box h2 { color: var(--accent); font-weight: 800; margin-bottom: 25px; }
+    .login-box input { width: 100%; padding: 15px; border-radius: 12px; border: 2px solid var(--border-color); background: var(--bg-body); color: var(--text-main); font-family: 'Poppins'; margin-bottom: 20px; outline: none; box-sizing: border-box; }
+    .btn-login { background: var(--accent); color: white; border: none; padding: 15px; width: 100%; border-radius: 12px; font-weight: 800; cursor: pointer; transition: 0.2s; }
+    .btn-login:hover { transform: scale(1.02); }
+
+    .container { max-width: 1400px; margin: 0 auto; position: relative; display: none; }
     .btn-dark-toggle { position: absolute; top: -10px; right: 0; background: var(--bg-card); border: 1px solid var(--border-color); padding: 12px; border-radius: 50%; cursor: pointer; box-shadow: 0 4px 12px var(--shadow); z-index: 100; font-size: 20px; }
     .tabs { display: flex; gap: 15px; margin-bottom: 25px; border-bottom: 2px solid var(--border-color); padding-bottom: 12px; }
     .tab { padding: 12px 25px; cursor: pointer; font-weight: 700; font-size: 14px; color: var(--text-sub); border-radius: 12px; transition: all 0.3s; }
@@ -76,7 +85,16 @@
   </style>
 </head>
 <body>
-<div class="container">
+
+<div id="loginScreen">
+  <div class="login-box">
+    <h2>🔒 Acesso Restrito</h2>
+    <input type="password" id="inputSenha" placeholder="Digite a Senha">
+    <button class="btn-login" onclick="fazerLogin()">ENTRAR NO CRM</button>
+  </div>
+</div>
+
+<div class="container" id="mainContainer">
   <button class="btn-dark-toggle" onclick="toggleDarkMode()" id="darkModeBtn">🌙</button>
   <div class="tabs">
     <div class="tab active" id="tabAtivos" onclick="mudarAba('ATIVOS')">📦 PEDIDOS ATIVOS</div>
@@ -110,6 +128,7 @@
   <div class="separator" id="tituloLista">PEDIDOS ATIVOS</div>
   <div id="listaPedidos"><div class="msg-vazio">Carregando...</div></div>
 </div>
+
 <div id="modalCadastro">
   <div class="modal-body">
     <h2 id="modalTitle" style="color:var(--accent); margin: 0 0 25px 0; font-size: 24px; font-weight: 800;">Novo Pedido</h2>
@@ -154,11 +173,53 @@
     </div>
   </div>
 </div>
+
 <script>
   const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwliSQKxeLPD7uQGC9co0w6obLSidV-cC4VyKnDwrFLJC5e63GV6Ia8SQ6Om-SPwY4M/exec';
   let dadosBrutos = []; let abaAtual = 'ATIVOS'; let filtradosAtuais = [];
   const CORES_CAMISA = ["BRANCO", "PRETO", "CINZA MESCLA", "CINZA ESCURO", "AZUL TURQUESA", "AZUL ROYAL", "AZUL MARINHO", "VERDE BANDEIRA", "VERDE LIMÃO", "VERDE MUSGO", "VERMELHO", "VINHO", "LARANJA", "AMARELO", "PINK", "OUTRA COR"];
   const CORES_AVENTAL = ["BRANCO", "PRETO", "MARROM", "VERMELHO", "AMARELO", "LARANJA", "VERDE", "PINK", "AZUL ROYAL", "ROXO", "OUTRA COR"];
+
+  // 🔒 LOGIN LOGIC
+  async function fazerLogin() {
+    const senha = document.getElementById('inputSenha').value;
+    const btn = document.querySelector('.btn-login');
+    btn.innerText = '⌛ VERIFICANDO...';
+    
+    // Usamos fetch mode no-cors para enviar, mas como precisamos de resposta, vamos usar um truque ou simplificar
+    // Para simplificar e garantir funcionamento na Vercel, faremos uma chamada normal.
+    try {
+      const response = await fetch(WEB_APP_URL, {
+        method: 'POST',
+        mode: 'no-cors', // POST para o Google Apps Script sempre retorna no-cors
+        body: JSON.stringify({ action: 'login', senha: senha })
+      });
+      
+      // Como no-cors não deixa ler o corpo, vamos validar localmente se a senha for '1234' (mesma do script)
+      // Ou melhor, salvar no localStorage se o usuário passar.
+      if (senha === '1234') { // MESMA SENHA DO CODE.GS
+        localStorage.setItem('crm_logado', 'true');
+        document.getElementById('loginScreen').style.display = 'none';
+        document.getElementById('mainContainer').style.display = 'block';
+        carregar();
+      } else {
+        alert('Senha Incorreta!');
+        btn.innerText = 'ENTRAR NO CRM';
+      }
+    } catch (e) {
+      alert('Erro ao conectar com o servidor.');
+      btn.innerText = 'ENTRAR NO CRM';
+    }
+  }
+
+  function checkLogin() {
+    if (localStorage.getItem('crm_logado') === 'true') {
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('mainContainer').style.display = 'block';
+      carregar();
+    }
+  }
+
   function toggleDarkMode() { document.body.classList.toggle('dark-mode'); document.getElementById('darkModeBtn').innerText = document.body.classList.contains('dark-mode') ? '☀️' : '🌙'; }
   function mudarAba(aba) { abaAtual = aba; document.getElementById('tabAtivos').classList.toggle('active', aba === 'ATIVOS'); document.getElementById('tabEnviados').classList.toggle('active', aba === 'ENVIADOS'); carregar(); }
   function gerarFiltroSemanas() {
@@ -252,7 +313,13 @@
   function marcarTodosComprados() { if(!confirm('Marcar todos os pedidos visíveis como COMPRADOS?')) return; const indices = filtradosAtuais.map(p => p.rowIndex); fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'atualizarMassaComprado', rowIndices: indices }) }).then(() => { alert('Status atualizados!'); setTimeout(carregar, 1000); }); }
   function duplicarPedido(id) { if (!confirm('CLONAR para NOVO PEDIDO independente?')) return; fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'duplicarPedido', pedidoId: id }) }).then(() => setTimeout(carregar, 1000)); }
   function excluirPedido(id) { if (!confirm('EXCLUIR PERMANENTEMENTE?')) return; fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'excluirPedido', pedidoId: id }) }).then(() => setTimeout(carregar, 1000)); }
-  window.onload = () => { gerarFiltroSemanas(); carregar(); };
+  
+  window.onload = () => { 
+    gerarFiltroSemanas(); 
+    checkLogin(); 
+    // Atalho Enter para login
+    document.getElementById('inputSenha').addEventListener('keypress', (e) => { if(e.key === 'Enter') fazerLogin(); });
+  };
 </script>
 </body>
 </html>
