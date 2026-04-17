@@ -6,11 +6,13 @@
   <style>
     :root {
       --bg-body: #f8f9fa; --bg-card: #ffffff; --text-main: #1a1a1a; --text-sub: #6c757d; --border-color: #dee2e6; --shadow: rgba(0,0,0,0.08); --accent: #dc3545;
-      --card-p-comprar: #eef2ff; --card-comprado: #f0fff4; --card-producao: #fffaf0; --card-produzido: #feebc8; --card-reagendado: #fff5f5;
+      --card-p-comprar: #eef2ff; --card-comprado: #f0fff4; --card-producao: #fffaf0; --card-produzido: #fefcbf; --card-reagendado: #fff5f5;
+      --card-liberado: #fefcbf; /* Amarelo quando liberado também */
     }
     body.dark-mode {
       --bg-body: #121212; --bg-card: #1e1e1e; --text-main: #f8f9fa; --text-sub: #adb5bd; --border-color: #2d2d2d; --shadow: rgba(0,0,0,0.5);
       --card-p-comprar: #1a237e; --card-comprado: #1b5e20; --card-producao: #4e342e; --card-produzido: #5d4037; --card-reagendado: #7b1fa2;
+      --card-liberado: #5d4037;
     }
     body { font-family: 'Poppins', sans-serif; background-color: var(--bg-body); color: var(--text-main); margin: 0; padding: 20px 10px; transition: all 0.3s ease; }
     
@@ -52,11 +54,17 @@
     .separator::after { content: ""; display: block; width: 40px; height: 3px; background: var(--accent); margin: 8px auto; border-radius: 2px; }
 
     .order-card { background: var(--bg-card); border-radius: 20px; margin-bottom: 15px; box-shadow: 0 6px 15px var(--shadow); overflow: hidden; border: 1px solid var(--border-color); transition: transform 0.2s ease; position: relative; }
+    
+    /* REGRAS DE CORES DO CARD */
     .status-p-comprar { background: var(--card-p-comprar) !important; }
     .status-comprado { background: var(--card-comprado) !important; border-left: 8px solid #28a745; }
     .status-em-producao { background: var(--card-producao) !important; }
     .status-produzido { background: var(--card-produzido) !important; }
-    .status-reagendado { background: var(--card-reagendado) !important; border-left: 8px solid #fd7e14; }
+    .status-liberado { background: var(--card-liberado) !important; color: #198754 !important; }
+    .status-liberado * { color: #198754 !important; }
+    .status-reagendado { background: #fff5f5 !important; border-left: 8px solid #fd7e14; }
+    body.dark-mode .status-reagendado { background: #7b1fa2 !important; }
+
     .order-header-centered { background: #1a1a1a; color: white; padding: 4px 25px; border-radius: 0 0 15px 15px; font-weight: 800; font-size: 11px; position: absolute; top: 0; left: 50%; transform: translateX(-50%); box-shadow: 0 2px 6px rgba(0,0,0,0.1); z-index: 2; }
     
     .card-main-row { display: grid; grid-template-columns: 1fr 1fr 1fr 1.5fr 1.5fr 140px; gap: 15px; padding: 30px 20px 10px 20px; align-items: center; border-bottom: 1px solid var(--border-color); }
@@ -66,7 +74,7 @@
     .chk-item { display: flex; align-items: center; gap: 6px; font-size: 9px; font-weight: 600; margin-bottom: 4px; cursor: pointer; color: var(--text-main); }
     .chk-item input { width: 14px; height: 14px; cursor: pointer; accent-color: var(--accent); }
     .card-actions-right { display: flex; flex-direction: column; gap: 5px; border-left: 1px solid var(--border-color); padding-left: 15px; }
-    .btn-card-right { padding: 6px; font-size: 10px; border-radius: 8px; width: 100%; font-weight: 800; }
+    .btn-card-right { padding: 6px; font-size: 10px; border-radius: 8px; width: 100%; font-weight: 800; border: none; cursor: pointer; font-family: 'Poppins'; }
     
     .items-table-area { padding: 10px 20px; background: rgba(0,0,0,0.01); display: grid; grid-template-columns: 2fr 1fr; gap: 20px; align-items: start; }
     .color-text { font-weight: 800; text-transform: uppercase; font-size: 11px; }
@@ -83,6 +91,10 @@
     .color-MARROM { color: #795548; }
     .color-ROXO { color: #6f42c1; }
     
+    .btn-delete-order { position: absolute; top: 10px; left: 10px; background: none; border: none; color: #dc3545; cursor: pointer; font-size: 14px; opacity: 0.3; transition: 0.2s; z-index: 5; }
+    .btn-delete-order:hover { opacity: 1; transform: scale(1.2); }
+    .alert-pendente { font-size: 8px; background: #dc3545; color: white; padding: 2px 6px; border-radius: 5px; margin-top: 5px; font-weight: 800; display: inline-block; }
+
     #modalCadastro, #modalConfig { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9999; backdrop-filter: blur(8px); }
     .modal-body { background: var(--bg-card); color: var(--text-main); width: 95%; max-width: 950px; margin: 10px auto; padding: 40px; border-radius: 30px; max-height: 96vh; overflow-y: auto; box-sizing: border-box; }
     
@@ -297,7 +309,6 @@
     const isDark = body.classList.contains('dark-mode');
     document.getElementById('darkModeBtn').innerText = isDark ? '☀️' : '🌙';
     
-    // Troca as imagens das logos
     const logoLogin = document.getElementById('loginLogo');
     const logoHome = document.getElementById('homeLogo');
     const src = isDark ? 'logopreto.png' : 'logobranco.jpg';
@@ -335,10 +346,21 @@
     const container = document.getElementById('listaPedidos'); container.innerHTML = '';
     const grupos = pedidos.reduce((acc, p) => { const id = String(p.ID).trim(); if (!acc[id]) acc[id] = []; acc[id].push(p); return acc; }, {});
     for (const id in grupos) {
-      const itens = grupos[id]; const p = itens[0]; let statusClass = abaAtual === 'ENVIADOS' ? 'finalizado' : '';
-      if (abaAtual === 'ATIVOS') { if (p.P_COMPRAR == 'TRUE') statusClass = 'status-p-comprar'; if (p.REAGENDADO == 'TRUE') statusClass = 'status-reagendado'; if (p.EM_PRODUCAO == 'TRUE') statusClass = 'status-em-producao'; if (p.PRODUZIDO == 'TRUE') statusClass = 'status-produzido'; if (p.COMPRADO == 'TRUE') statusClass = 'status-comprado'; }
+      const itens = grupos[id]; const p = itens[0]; 
+      
+      // LÓGICA DE CLASSES DE STATUS (HIERARQUIA)
+      let statusClass = '';
+      if (abaAtual === 'ATIVOS') {
+        if (p.REAGENDADO == 'TRUE') statusClass = 'status-reagendado';
+        else if (p.PRODUZIDO == 'TRUE' && p.ETIQ_LIBERADA == 'TRUE') statusClass = 'status-liberado';
+        else if (p.PRODUZIDO == 'TRUE') statusClass = 'status-produzido';
+        else if (p.EM_PRODUCAO == 'TRUE') statusClass = 'status-em-producao';
+        else if (p.COMPRADO == 'TRUE') statusClass = 'status-comprado';
+        else if (p.P_COMPRAR == 'TRUE') statusClass = 'status-p-comprar';
+      }
+      
       let pendente = !p.DATA || itens.some(i => !i.PRODUTO || !i.COR);
-      container.innerHTML += `<div class="order-card ${statusClass}"><button class="btn-delete-order" onclick="excluirPedido('${id}')">🗑️</button><div class="order-header-centered">PEDIDO #${id}</div><div class="card-main-row"><div><div class="data-label">ORIGEM / LOGO</div><div class="data-value">${p.LOJA} • ${p.LOCAL}</div><div class="data-value" style="font-size:10px; color:var(--text-sub);">${p.LOGO}</div>${pendente ? '<div class="alert-pendente">⚠️ DADOS PENDENTES</div>' : ''}</div><div><div class="data-label">CLIENTE</div><div class="data-value ${p.COMPRADO == 'TRUE' ? 'nome-comprado' : ''}">${p.NOME}</div><div class="data-label" style="margin-top:2px;">REF: ${p.APELIDO}</div></div><div><div class="data-label">ENTREGA</div><div class="data-value" style="color:var(--accent)">${p.DATA || '---'} (${p.SEMANA || '---'})${p.REAGENDADO == 'TRUE' ? `<br><span style="font-size:8px; background:#fd7e14; color:white; padding:2px 5px; border-radius:5px; margin-top:4px; display:inline-block; font-weight:800;">🗓️ ${p.DATA_REAGENDADO}</span>` : ''}</div></div><div class="status-box">${chk(p.rowIndex, 'COMPRADO', p.COMPRADO)}${chk(p.rowIndex, 'MATRIZ', p.MATRIZ)}${chk(p.rowIndex, 'AMOSTRA', p.AMOSTRA)}${chk(p.rowIndex, 'APROVADO', p.APROVADO)}</div><div class="status-box">${chk(p.rowIndex, 'EM_PRODUCAO', p.EM_PRODUCAO)}${chk(p.rowIndex, 'PRODUZIDO', p.PRODUZIDO)}${chk(p.rowIndex, 'ETIQ_LIBERADA', p.ETIQ_LIBERADA)}${chk(p.rowIndex, 'ENVIADO', p.ENVIADO)}</div><div class="card-actions-right"><div class="chk-item" style="margin-bottom:3px;"><span style="color:#007bff; font-weight:800; font-size:8px;">P/ COMPRAR</span><input type="checkbox" ${p.P_COMPRAR == 'TRUE' ? 'checked' : ''} onchange="atualizar(${p.rowIndex}, 'P_COMPRAR', this.checked)"></div><div class="chk-item" style="margin-bottom:3px;"><span style="color:#fd7e14; font-weight:800; font-size:8px;">REAGENDADO</span><input type="checkbox" ${p.REAGENDADO == 'TRUE' ? 'checked' : ''} onchange="promptReagendar(${p.rowIndex}, this.checked)"></div><div style="display:flex; gap:4px;"><button class="btn btn-card-right" style="background:#007bff; color:white;" onclick="abrirEdicao('${id}')">✏️ EDITAR</button><button class="btn btn-card-right" style="background:var(--accent); color:white;" onclick="duplicarPedido('${id}')">📋 CLONAR</button></div></div></div><div class="items-table-area"><table style="width:100%; border-collapse: collapse;"><thead><tr style="font-size:8px; color:var(--text-sub); text-align:left; border-bottom: 1px solid var(--border-color);"><th style="padding-bottom:4px;">QTD</th><th style="padding-bottom:4px;">PRODUTO</th><th style="padding-bottom:4px;">COR</th><th style="padding-bottom:4px;">TAM</th></tr></thead><tbody>${itens.map(i => `<tr style="border-bottom: 1px solid var(--border-color);"><td style="font-size:11px; font-weight:800; padding:6px 0; color:var(--text-main);">${i.QTD}</td><td style="font-size:11px; font-weight:700; color:var(--text-main);">${i.PRODUTO || '---'}</td><td style="font-size:11px; font-weight:800;"><span class="color-text color-${getColorKey(i.COR)}">${i.COR || '---'}</span></td><td style="font-size:11px; font-weight:800; color:var(--text-main);">${i.TAMANHO}</td></tr>`).join('')}</tbody></table><div style="position:relative; background:var(--bg-body); border-radius:10px; padding:10px; font-size:10px; color:var(--text-sub); border:1px solid var(--border-color);"><div style="position:absolute; top:-6px; left:8px; background:var(--bg-card); font-size:7px; padding:0 4px; font-weight:800; color:var(--accent);">OBS</div>${p.OBS || 'Sem anotações.'}</div></div></div>`;
+      container.innerHTML += `<div class="order-card ${statusClass}"><button class="btn-delete-order" onclick="excluirPedido('${id}')">🗑️</button><div class="order-header-centered">PEDIDO #${id}</div><div class="card-main-row"><div><div class="data-label">ORIGEM / LOGO</div><div class="data-value">${p.LOJA} • ${p.LOCAL}</div><div class="data-value" style="font-size:10px; opacity:0.8;">${p.LOGO}</div>${pendente ? '<div class="alert-pendente">⚠️ DADOS PENDENTES</div>' : ''}</div><div><div class="data-label">CLIENTE</div><div class="data-value">${p.NOME}</div><div class="data-label" style="margin-top:2px;">REF: ${p.APELIDO}</div></div><div><div class="data-label">ENTREGA</div><div class="data-value">${p.DATA || '---'} (${p.SEMANA || '---'})${p.REAGENDADO == 'TRUE' ? `<br><span style="font-size:8px; background:#fd7e14; color:white; padding:2px 5px; border-radius:5px; margin-top:4px; display:inline-block; font-weight:800;">🗓️ ${p.DATA_REAGENDADO}</span>` : ''}</div></div><div class="status-box">${chk(p.rowIndex, 'COMPRADO', p.COMPRADO)}${chk(p.rowIndex, 'MATRIZ', p.MATRIZ)}${chk(p.rowIndex, 'AMOSTRA', p.AMOSTRA)}${chk(p.rowIndex, 'APROVADO', p.APROVADO)}</div><div class="status-box">${chk(p.rowIndex, 'EM_PRODUCAO', p.EM_PRODUCAO)}${chk(p.rowIndex, 'PRODUZIDO', p.PRODUZIDO)}${chk(p.rowIndex, 'ETIQ_LIBERADA', p.ETIQ_LIBERADA)}${chk(p.rowIndex, 'ENVIADO', p.ENVIADO)}</div><div class="card-actions-right"><div class="chk-item" style="margin-bottom:3px;"><span style="color:#007bff; font-weight:800; font-size:8px;">P/ COMPRAR</span><input type="checkbox" ${p.P_COMPRAR == 'TRUE' ? 'checked' : ''} onchange="atualizar(${p.rowIndex}, 'P_COMPRAR', this.checked)"></div><div class="chk-item" style="margin-bottom:3px;"><span style="color:#fd7e14; font-weight:800; font-size:8px;">REAGENDADO</span><input type="checkbox" ${p.REAGENDADO == 'TRUE' ? 'checked' : ''} onchange="promptReagendar(${p.rowIndex}, this.checked)"></div><div style="display:flex; gap:4px;"><button class="btn-card-right" style="background:#007bff; color:white;" onclick="abrirEdicao('${id}')">✏️ EDITAR</button><button class="btn-card-right" style="background:var(--accent); color:white;" onclick="duplicarPedido('${id}')">📋 CLONAR</button></div></div></div><div class="items-table-area"><table style="width:100%; border-collapse: collapse;"><thead><tr style="font-size:8px; opacity:0.7; text-align:left; border-bottom: 1px solid var(--border-color);"><th style="padding-bottom:4px;">QTD</th><th style="padding-bottom:4px;">PRODUTO</th><th style="padding-bottom:4px;">COR</th><th style="padding-bottom:4px;">TAM</th></tr></thead><tbody>${itens.map(i => `<tr style="border-bottom: 1px solid var(--border-color);"><td style="font-size:11px; font-weight:800; padding:6px 0;">${i.QTD}</td><td style="font-size:11px; font-weight:700;">${i.PRODUTO || '---'}</td><td style="font-size:11px; font-weight:800;"><span class="color-text color-${getColorKey(i.COR)}">${i.COR || '---'}</span></td><td style="font-size:11px; font-weight:800;">${i.TAMANHO}</td></tr>`).join('')}</tbody></table><div style="position:relative; background:rgba(0,0,0,0.05); border-radius:10px; padding:10px; font-size:10px; border:1px solid var(--border-color);"><div style="position:absolute; top:-6px; left:8px; background:var(--bg-card); font-size:7px; padding:0 4px; font-weight:800; color:var(--accent);">OBS</div>${p.OBS || 'Sem anotações.'}</div></div></div>`;
     }
   }
 
@@ -413,4 +435,3 @@
 </script>
 </body>
 </html>
-<!-- teste -->
