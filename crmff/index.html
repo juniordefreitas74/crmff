@@ -4,7 +4,9 @@
   <base target="_top">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
   <style>
+    /* DESIGN EXACTLY LIKE THE IMAGE */
     body { font-family: 'Poppins', sans-serif; background-color: #f3f0f7; color: #333; margin: 0; padding: 20px; }
+    
     .kpi-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; margin-bottom: 30px; }
     .kpi-card { background: white; padding: 15px; border-radius: 20px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-bottom: 5px solid; }
     .kpi-card p { margin: 0; font-size: 11px; font-weight: 700; color: #555; text-transform: uppercase; }
@@ -20,7 +22,10 @@
     .btn-clear { background: #e0e0e0; color: #666; }
     .btn-add { background: #ff3385; color: white; padding: 12px; margin-top: 15px; font-size: 16px; }
 
-    .order-card { background: white; border-radius: 25px; margin-bottom: 25px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); overflow: hidden; }
+    .separator { text-align: center; margin: 30px 0; font-weight: 700; color: #2c3e50; font-size: 18px; letter-spacing: 2px; }
+
+    /* ORDER CARD */
+    .order-card { background: white; border-radius: 25px; margin-bottom: 25px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); overflow: hidden; position: relative; }
     .order-header { background: #007bff; color: white; padding: 10px 25px; display: inline-block; border-radius: 0 0 20px 0; font-weight: 700; font-size: 14px; }
     .card-content { padding: 20px 25px; display: grid; grid-template-columns: 80px 140px 100px 120px 120px 120px 1fr; gap: 15px; border-bottom: 1px solid #eee; }
     .data-label { font-size: 10px; color: #999; font-weight: 700; }
@@ -28,11 +33,13 @@
     .status-box { border-left: 1px solid #eee; padding-left: 10px; }
     .chk-item { display: flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; margin-bottom: 3px; }
     
+    /* MODAL */
     #modalCadastro { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:9999; }
     .modal-body { background:white; width:90%; max-width:700px; margin: 30px auto; padding:25px; border-radius:20px; max-height: 85vh; overflow-y: auto; }
     .item-form-row { display: grid; grid-template-columns: 70px 1fr 1fr 80px auto; gap: 10px; margin-bottom: 10px; background: #f9f9f9; padding: 10px; border-radius: 10px; align-items: center; }
 
-    .obs-box { border: 1px solid #ccc; border-radius: 15px; padding: 15px; height: 60px; font-size: 12px; color: #666; position: relative; }
+    .obs-box { border: 1px solid #ccc; border-radius: 15px; padding: 15px; height: 60px; font-size: 12px; color: #666; position: relative; width: 100%; }
+    .btn-side { width: 100%; padding: 5px; border-radius: 6px; border: none; font-size: 10px; font-weight: 700; cursor: pointer; color: white; margin-bottom: 5px; }
   </style>
 </head>
 <body>
@@ -66,6 +73,7 @@
     <button class="btn btn-add" onclick="abrirModal()">+ CADASTRAR</button>
   </div>
 
+  <div class="separator">PEDIDOS</div>
   <div id="listaPedidos">Carregando...</div>
 
   <!-- MODAL DE CADASTRO -->
@@ -93,7 +101,7 @@
         </div>
       </div>
       
-      <h4 style="margin-bottom:10px;">Produtos</h4>
+      <h4>Produtos</h4>
       <div id="itensPedidoContainer">
         <div class="item-form-row">
           <input type="number" class="iQtd" placeholder="Qtd">
@@ -105,18 +113,16 @@
           </select>
           <select class="iCor">
             <option value="">Cor</option>
-            <option>BRANCO</option><option>PRETO</option><option>CINZA MESCLA</option><option>CINZA ESCURO</option><option>AZUL TURQUESA</option><option>AZUL ROYAL</option><option>AZUL MARINHO</option><option>VERDE BANDEIRA</option><option>VERDE LIMÃO</option><option>VERDE MUSGO</option><option>VERMELHO</option><option>VINHO</option><option>LARANJA</option><option>AMARELO</option><option>PINK</option>
+            <option>BRANCO</option><option>PRETO</option><option>CINZA MESCLA</option><option>AZUL ROYAL</option><option>AZUL MARINHO</option><option>VERDE BANDEIRA</option><option>VERMELHO</option><option>AMARELO</option><option>PINK</option>
           </select>
           <select class="iTam">
             <option>U</option><option>P</option><option>M</option><option>G</option><option>GG</option><option>EG</option>
           </select>
-          <button onclick="this.parentElement.remove()" style="background:red; color:white; border:none; border-radius:5px; cursor:pointer; padding:5px 10px;">X</button>
+          <button onclick="this.parentElement.remove()" style="background:red; color:white; border:none; border-radius:5px; cursor:pointer;">X</button>
         </div>
       </div>
-      <button onclick="addLinhaForm()" style="padding:5px 15px; border-radius:10px; cursor:pointer;">+ Adicionar Produto</button>
-      
+      <button onclick="addLinhaForm()">+ Adicionar Produto</button>
       <div style="margin-top:20px;"><label><input type="checkbox" id="cPComprar"> MARCAR "P/ COMPRAR"</label></div>
-
       <button class="btn btn-add" onclick="salvar()">FINALIZAR CADASTRO</button>
       <button class="btn btn-clear" onclick="fecharModal()" style="margin-top:10px;">CANCELAR</button>
     </div>
@@ -140,24 +146,17 @@
       document.getElementById('k-pr').innerText = kpis.produzido;
       document.getElementById('k-el').innerText = kpis.etiqLiberada;
       document.getElementById('k-ei').innerText = kpis.etiqImpressa;
-      document.getElementById('k-ev').innerText = kpis.enviados;
       document.getElementById('k-re').innerText = kpis.reagendado;
       document.getElementById('k-pc').innerText = kpis.paraComprar;
     }
 
     const container = document.getElementById('listaPedidos');
     container.innerHTML = '';
-    
-    const grupos = pedidos.reduce((acc, p) => {
-      if(!acc[p.ID]) acc[p.ID] = [];
-      acc[p.ID].push(p);
-      return acc;
-    }, {});
+    const grupos = pedidos.reduce((acc, p) => { if(!acc[p.ID]) acc[p.ID] = []; acc[p.ID].push(p); return acc; }, {});
 
     for (const id in grupos) {
       const itens = grupos[id];
       const p = itens[0];
-      
       container.innerHTML += `
         <div class="order-card">
           <div class="order-header">NÚMERO:${p.ID}</div>
@@ -165,21 +164,13 @@
             <div><div class="data-label">LOJA</div><div class="data-value">${p.LOJA}</div><br><div class="data-label">LOCAL</div><div class="data-value">${p.LOCAL}</div></div>
             <div><div class="data-label">LOGO</div><div class="data-value">${p.LOGO}</div><br><div class="data-label">NOME</div><div class="data-value">${p.NOME}</div></div>
             <div><div class="data-label">APELIDO</div><div class="data-value">${p.APELIDO}</div></div>
-            <div>
-              <div class="data-label">DATA:</div><div class="data-value" style="color:#ff3385">${p.DATA}</div>
-              <div class="data-label">SEM.:</div><div class="data-value" style="color:#ff3385">${p.SEMANA}</div>
-            </div>
-            <div class="status-box">
-              ${chk(p.rowIndex, 'COMPRADO', p.COMPRADO)}
-              ${chk(p.rowIndex, 'MATRIZ', p.MATRIZ)}
-              ${chk(p.rowIndex, 'AMOSTRA', p.AMOSTRA)}
-            </div>
-            <div class="status-box">
-              ${chk(p.rowIndex, 'EM_PRODUCAO', p.EM_PRODUCAO)}
-              ${chk(p.rowIndex, 'PRODUZIDO', p.PRODUZIDO)}
-            </div>
+            <div><div class="data-label">DATA:</div><div class="data-value" style="color:#ff3385">${p.DATA}</div><div class="data-label">SEM.:</div><div class="data-value" style="color:#ff3385">${p.SEMANA}</div></div>
+            <div class="status-box">${chk(p.rowIndex, 'COMPRADO', p.COMPRADO)}${chk(p.rowIndex, 'MATRIZ', p.MATRIZ)}${chk(p.rowIndex, 'AMOSTRA', p.AMOSTRA)}</div>
+            <div class="status-box">${chk(p.rowIndex, 'EM_PRODUCAO', p.EM_PRODUCAO)}${chk(p.rowIndex, 'PRODUZIDO', p.PRODUZIDO)}${chk(p.rowIndex, 'ETIQ_LIBERADA', p.ETIQ_LIBERADA)}</div>
             <div style="text-align:right">
                <div class="chk-item"><input type="checkbox" ${p.P_COMPRAR=='TRUE'?'checked':''}> <span style="color:#ff3385">P/ COMPRAR</span></div>
+               <button class="btn-side" style="background:#00cfd5">ADICIONAR LINHA</button>
+               <button class="btn-side" style="background:#8e94f2">DUPLICAR LINHA</button>
             </div>
           </div>
           <div style="padding:15px 25px; display:grid; grid-template-columns: 2fr 1.5fr; gap:20px;">
@@ -191,82 +182,31 @@
             </table>
             <div class="obs-box"><div style="position:absolute; top:-8px; left:10px; background:white; font-size:10px; padding:0 5px;">OBSERVAÇÃO:</div>${p.OBS || ''}</div>
           </div>
-        </div>
-      `;
+        </div>`;
     }
   }
 
-  function chk(row, campo, val) {
-    return `<div class="chk-item"><input type="checkbox" ${val=='TRUE'?'checked':''} onchange="atualizar(${row},'${campo}',this.checked)"> ${campo}</div>`;
-  }
+  function chk(row, campo, val) { return `<div class="chk-item"><input type="checkbox" ${val=='TRUE'?'checked':''} onchange="atualizar(${row},'${campo}',this.checked)"> ${campo}</div>`; }
 
   function filtrar() {
     const busca = document.getElementById('filtroBusca').value.toLowerCase();
-    const data = document.getElementById('filtroData').value;
-    const semana = document.getElementById('filtroSemana').value;
-
-    const filtrados = dadosBrutos.filter(p => {
-      const matchBusca = p.NOME.toLowerCase().includes(busca) || p.ID.includes(busca) || p.APELIDO.toLowerCase().includes(busca);
-      const matchData = data ? p.DATA === data.split('-').reverse().join('/') : true;
-      const matchSemana = semana ? p.SEMANA === semana : true;
-      return matchBusca && matchData && matchSemana;
-    });
+    const filtrados = dadosBrutos.filter(p => p.NOME.toLowerCase().includes(busca) || p.ID.includes(busca));
     renderizar(filtrados);
   }
 
-  function limpar() {
-    document.getElementById('filtroBusca').value = '';
-    document.getElementById('filtroData').value = '';
-    document.getElementById('filtroSemana').value = '';
-    carregar();
-  }
-
+  function limpar() { document.getElementById('filtroBusca').value = ''; carregar(); }
   function abrirModal() { document.getElementById('modalCadastro').style.display = 'block'; }
   function fecharModal() { document.getElementById('modalCadastro').style.display = 'none'; }
-  
-  function addLinhaForm() {
-    const container = document.getElementById('itensPedidoContainer');
-    const row = container.children[0].cloneNode(true);
-    row.querySelectorAll('input, select').forEach(i => i.value = '');
-    container.appendChild(row);
-  }
-
-  function setSemana() {
-    const d = new Date(document.getElementById('cData').value);
-    const dias = ["DOMINGO","SEGUNDA","TERÇA","QUARTA","QUINTA","SEXTA","SÁBADO"];
-    document.getElementById('cSemana').value = dias[d.getUTCDay()];
-  }
+  function addLinhaForm() { const container = document.getElementById('itensPedidoContainer'); const row = container.children[0].cloneNode(true); row.querySelectorAll('input, select').forEach(i => i.value = ''); container.appendChild(row); }
+  function setSemana() { const d = new Date(document.getElementById('cData').value); const dias = ["DOMINGO","SEGUNDA","TERÇA","QUARTA","QUINTA","SEXTA","SÁBADO"]; document.getElementById('cSemana').value = dias[d.getUTCDay()]; }
 
   function salvar() {
-    const cabecalho = {
-      loja: document.getElementById('cLoja').value,
-      local: document.getElementById('cLocal').value,
-      logo: document.getElementById('cLogo').value,
-      nome: document.getElementById('cNome').value,
-      apelido: document.getElementById('cApelido').value,
-      data: document.getElementById('cData').value.split('-').reverse().join('/'),
-      semana: document.getElementById('cSemana').value,
-      hora: new Date().toLocaleTimeString().substring(0,5),
-      pComprar: document.getElementById('cPComprar').checked
-    };
-    
-    const itens = Array.from(document.querySelectorAll('.item-form-row')).map(row => ({
-      quantidade: row.querySelector('.iQtd').value,
-      produto: row.querySelector('.iProd').value,
-      cor: row.querySelector('.iCor').value,
-      tamanho: row.querySelector('.iTam').value
-    }));
-
-    google.script.run.withSuccessHandler(() => {
-      fecharModal();
-      carregar();
-    }).salvarPedido(cabecalho, itens);
+    const cab = { loja: document.getElementById('cLoja').value, local: document.getElementById('cLocal').value, logo: document.getElementById('cLogo').value, nome: document.getElementById('cNome').value, apelido: document.getElementById('cApelido').value, data: document.getElementById('cData').value.split('-').reverse().join('/'), semana: document.getElementById('cSemana').value, hora: new Date().toLocaleTimeString().substring(0,5), pComprar: document.getElementById('cPComprar').checked };
+    const itens = Array.from(document.querySelectorAll('.item-form-row')).map(row => ({ quantidade: row.querySelector('.iQtd').value, produto: row.querySelector('.iProd').value, cor: row.querySelector('.iCor').value, tamanho: row.querySelector('.iTam').value }));
+    google.script.run.withSuccessHandler(() => { fecharModal(); carregar(); }).salvarPedido(cab, itens);
   }
 
-  function atualizar(row, campo, val) {
-    google.script.run.withSuccessHandler(carregar).atualizarStatus(row, campo, val);
-  }
-
+  function atualizar(row, campo, val) { google.script.run.withSuccessHandler(carregar).atualizarStatus(row, campo, val); }
   window.onload = carregar;
 </script>
 </body>
