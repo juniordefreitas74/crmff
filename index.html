@@ -73,7 +73,7 @@
     .order-card.finalizado .data-value, .order-card.finalizado .chk-item { font-size: 11px; font-style: italic; color: var(--text-sub) !important; }
 
     .nome-comprado { color: #8bc34a !important; font-weight: 800; }
-    .order-header { background: #4a90e2; color: white; padding: 12px 35px; display: inline-block; border-radius: 0 0 25px 0; font-weight: 800; font-size: 14px; }
+    .order-header { background: #4a90e2; color: white; padding: 12px 25px; display: inline-block; border-radius: 0 0 25px 0; font-weight: 800; font-size: 14px; position: relative; left: 15px; top: 0; box-shadow: 2px 2px 8px rgba(0,0,0,0.1); }
     .card-content { padding: 30px; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 25px; border-bottom: 1px solid var(--border-color); }
     .data-label { font-size: 10px; color: var(--text-sub); font-weight: 800; text-transform: uppercase; margin-bottom: 5px; }
     .data-value { font-size: 15px; font-weight: 700; color: var(--text-main); }
@@ -107,7 +107,11 @@
     .item-form-row { background: var(--bg-body); border: 2px solid var(--border-color); padding: 25px; border-radius: 25px; margin-bottom: 20px; position: relative; }
     .btn-delete-item { position: absolute; top: 15px; right: 15px; background: #ff5252; color: white; border: none; border-radius: 12px; padding: 10px; cursor: pointer; font-weight: 900; }
     
-    .btn-delete-order { background: #ff5252; position: absolute; top: 20px; right: 20px; padding: 12px; border-radius: 15px; color: white; border: none; cursor: pointer; box-shadow: 0 4px 10px rgba(255, 82, 82, 0.3); }
+    .btn-delete-order { background: #ff5252; position: absolute; top: 20px; right: 20px; padding: 12px; border-radius: 15px; color: white; border: none; cursor: pointer; box-shadow: 0 4px 10px rgba(255, 82, 82, 0.3); z-index: 5; }
+
+    /* AJUSTE BOTÕES CARD */
+    .card-actions-compact { display: flex; flex-direction: column; gap: 8px; justify-content: center; border-left: 2px solid var(--border-color); padding-left: 25px; }
+    .btn-compact { padding: 10px; font-size: 12px; border-radius: 12px; width: 120px; }
   </style>
 </head>
 <body>
@@ -137,11 +141,10 @@
           <option value="COMPRADO">COMPRADO</option><option value="EM_PRODUCAO">EM PRODUÇÃO</option><option value="PRODUZIDO">PRODUZIDO</option><option value="P_COMPRAR">P/ COMPRAR</option>
         </select>
       </div>
-      <div class="filter-group"><label>SEMANA DO PEDIDO</label>
+      <div class="filter-group"><label>FILTRAR POR SEMANA</label>
         <select id="filtroSemana">
           <option value="">Todas as Semanas</option>
-          <option value="ESTA_SEMANA">ESTA SEMANA (SEG-DOM)</option>
-          <option value="SEGUNDA">SEGUNDA</option><option value="TERÇA">TERÇA</option><option value="QUARTA">QUARTA</option><option value="QUINTA">QUINTA</option><option value="SEXTA">SEXTA</option><option value="SÁBADO">SÁBADO</option>
+          <!-- Gerado via JS -->
         </select>
       </div>
       <div style="display: flex; gap: 10px;">
@@ -228,6 +231,26 @@
     carregar();
   }
 
+  function gerarFiltroSemanas() {
+    const select = document.getElementById('filtroSemana');
+    select.innerHTML = '<option value="">Todas as Semanas</option>';
+    
+    const hoje = new Date();
+    const diaSemana = hoje.getDay(); // 0=Dom, 1=Seg...
+    const diffSeg = diaSemana === 0 ? -6 : 1 - diaSemana;
+    let segunda = new Date(hoje);
+    segunda.setDate(hoje.getDate() + diffSeg);
+    
+    for (let i = 0; i < 6; i++) {
+      const dia = segunda.getDate().toString().padStart(2, '0');
+      const mes = (segunda.getMonth() + 1).toString().padStart(2, '0');
+      const label = `Semana ${dia}/${mes}`;
+      const valor = `${segunda.getFullYear()}-${(segunda.getMonth()+1).toString().padStart(2,'0')}-${segunda.getDate().toString().padStart(2,'0')}`;
+      select.innerHTML += `<option value="${valor}">${label}</option>`;
+      segunda.setDate(segunda.getDate() + 7);
+    }
+  }
+
   function carregar() {
     document.getElementById('listaPedidos').innerHTML = '<div class="msg-vazio">Sincronizando...</div>';
     const script = document.createElement('script');
@@ -271,10 +294,10 @@
             <div><div class="data-label">ENTREGA</div><div class="data-value" style="color:var(--accent)">${p.DATA} (${p.SEMANA})${p.REAGENDADO == 'TRUE' ? `<br><span style="font-size:10px; background:orange; color:white; padding:4px 8px; border-radius:8px; margin-top:8px; display:inline-block; font-weight:800;">🗓️ REAGENDADO: ${p.DATA_REAGENDADO}</span>` : ''}</div></div>
             <div class="status-box">${chk(p.rowIndex, 'COMPRADO', p.COMPRADO)}${chk(p.rowIndex, 'MATRIZ', p.MATRIZ)}${chk(p.rowIndex, 'AMOSTRA', p.AMOSTRA)}${chkReag(p.rowIndex, p.REAGENDADO)}</div>
             <div class="status-box">${chk(p.rowIndex, 'EM_PRODUCAO', p.EM_PRODUCAO)}${chk(p.rowIndex, 'PRODUZIDO', p.PRODUZIDO)}${chk(p.rowIndex, 'ETIQ_LIBERADA', p.ETIQ_LIBERADA)}${chk(p.rowIndex, 'ENVIADO', p.ENVIADO)}</div>
-            <div style="text-align:right; display:flex; flex-direction:column; justify-content:center;">
-              <div class="chk-item" style="justify-content:flex-end; margin-bottom:15px;"><span style="color:var(--accent); font-weight:800;">P/ COMPRAR</span><input type="checkbox" ${p.P_COMPRAR == 'TRUE' ? 'checked' : ''} onchange="atualizar(${p.rowIndex}, 'P_COMPRAR', this.checked)"></div>
-              <button class="btn" style="background:#4a90e2; color:white; margin-bottom:10px; padding:8px;" onclick="abrirEdicao('${id}')">✏️ EDITAR</button>
-              <button class="btn" style="background:var(--accent); color:white; padding:8px;" onclick="duplicarPedido('${id}')">📋 CLONAR</button>
+            <div class="card-actions-compact">
+              <div class="chk-item" style="justify-content:flex-end; margin-bottom:10px;"><span style="color:var(--accent); font-weight:800; font-size:10px;">P/ COMPRAR</span><input type="checkbox" ${p.P_COMPRAR == 'TRUE' ? 'checked' : ''} onchange="atualizar(${p.rowIndex}, 'P_COMPRAR', this.checked)"></div>
+              <button class="btn btn-compact" style="background:#4a90e2; color:white;" onclick="abrirEdicao('${id}')">✏️ EDITAR</button>
+              <button class="btn btn-compact" style="background:var(--accent); color:white;" onclick="duplicarPedido('${id}')">📋 CLONAR</button>
             </div>
           </div>
           <div style="padding:25px 35px; display:grid; grid-template-columns: 2fr 1fr; gap:35px; background: rgba(0,0,0,0.03);">
@@ -307,25 +330,23 @@
   function filtrar() {
     const busca = document.getElementById('filtroBusca').value.toLowerCase().trim();
     const status = document.getElementById('filtroStatus').value;
-    const semana = document.getElementById('filtroSemana').value;
+    const semanaVal = document.getElementById('filtroSemana').value;
     
-    const hoje = new Date();
-    const diaSemana = hoje.getDay(); // 0=Dom, 1=Seg...
-    const diffSeg = diaSemana === 0 ? -6 : 1 - diaSemana;
-    const segunda = new Date(hoje); segunda.setDate(hoje.getDate() + diffSeg); segunda.setHours(0,0,0,0);
-    const domingo = new Date(segunda); domingo.setDate(segunda.getDate() + 6); domingo.setHours(23,59,59,999);
+    let seg, dom;
+    if (semanaVal) {
+      seg = new Date(semanaVal + 'T00:00:00');
+      dom = new Date(seg); dom.setDate(seg.getDate() + 6); dom.setHours(23,59,59,999);
+    }
 
     const filtrados = dadosBrutos.filter(p => {
       const matchBusca = !busca || (p.NOME && p.NOME.toLowerCase().includes(busca)) || (p.ID && String(p.ID).toLowerCase().includes(busca));
       const matchStatus = !status || p[status] == 'TRUE';
       let matchSemana = true;
-      if (semana === 'ESTA_SEMANA') {
+      if (semanaVal) {
         if (!p.DATA) return false;
         const dParts = p.DATA.split('/');
         const pData = new Date(dParts[2], dParts[1]-1, dParts[0]);
-        matchSemana = pData >= segunda && pData <= domingo;
-      } else if (semana) {
-        matchSemana = p.SEMANA === semana;
+        matchSemana = pData >= seg && pData <= dom;
       }
       return matchBusca && matchStatus && matchSemana;
     });
@@ -396,9 +417,13 @@
   }
 
   function atualizar(row, campo, val) { fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'atualizarStatus', rowIndex: row, campo: campo, valor: val }) }).then(() => setTimeout(carregar, 1000)); }
-  function duplicarPedido(pedidoId) { if (!confirm('Clonar venda?')) return; fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'duplicarPedido', pedidoId: pedidoId }) }).then(() => setTimeout(carregar, 1000)); }
+  function duplicarPedido(pedidoId) { if (!confirm('Deseja CLONAR esta venda para um NOVO PEDIDO independente?')) return; fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'duplicarPedido', pedidoId: pedidoId }) }).then(() => setTimeout(carregar, 1000)); }
   function excluirPedido(pedidoId) { if (!confirm('EXCLUIR PERMANENTEMENTE?')) return; fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'excluirPedido', pedidoId: pedidoId }) }).then(() => setTimeout(carregar, 1000)); }
-  window.onload = carregar;
+  
+  window.onload = () => {
+    gerarFiltroSemanas();
+    carregar();
+  };
 </script>
 </body>
 </html>
