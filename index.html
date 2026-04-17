@@ -11,83 +11,109 @@
       --text-sub: #777777;
       --border-color: #eeeeee;
       --shadow: rgba(0,0,0,0.05);
+      --accent: #ff3385;
     }
 
     body.dark-mode {
-      --bg-body: #1a1a1a;
-      --bg-card: #2d2d2d;
+      --bg-body: #121212;
+      --bg-card: #1e1e1e;
       --text-main: #e0e0e0;
-      --text-sub: #aaaaaa;
-      --border-color: #444444;
-      --shadow: rgba(0,0,0,0.3);
+      --text-sub: #999999;
+      --border-color: #333333;
+      --shadow: rgba(0,0,0,0.4);
     }
 
-    body { font-family: 'Poppins', sans-serif; background-color: var(--bg-body); color: var(--text-main); margin: 0; padding: 20px 10px; transition: background 0.3s, color 0.3s; }
+    body { font-family: 'Poppins', sans-serif; background-color: var(--bg-body); color: var(--text-main); margin: 0; padding: 20px 10px; transition: all 0.3s ease; }
     .container { max-width: 1200px; margin: 0 auto; position: relative; }
 
     /* BOTÃO MODO NOTURNO */
-    .btn-dark-toggle { position: absolute; top: -10px; right: 0; background: var(--bg-card); border: 1px solid var(--border-color); padding: 8px; border-radius: 50%; cursor: pointer; box-shadow: 0 2px 8px var(--shadow); z-index: 100; font-size: 16px; }
+    .btn-dark-toggle { position: absolute; top: -10px; right: 0; background: var(--bg-card); border: 1px solid var(--border-color); padding: 10px; border-radius: 50%; cursor: pointer; box-shadow: 0 4px 12px var(--shadow); z-index: 100; font-size: 18px; transition: transform 0.2s; }
+    .btn-dark-toggle:hover { transform: rotate(15deg); }
 
     /* ABAS */
-    .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid var(--border-color); padding-bottom: 10px; }
-    .tab { padding: 10px 20px; cursor: pointer; font-weight: 700; font-size: 14px; color: var(--text-sub); border-radius: 10px; transition: all 0.3s; }
-    .tab.active { background: #ff3385; color: white; }
+    .tabs { display: flex; gap: 15px; margin-bottom: 25px; border-bottom: 2px solid var(--border-color); padding-bottom: 12px; }
+    .tab { padding: 12px 25px; cursor: pointer; font-weight: 700; font-size: 14px; color: var(--text-sub); border-radius: 12px; transition: all 0.3s; border: 1px solid transparent; }
+    .tab:hover { color: var(--accent); }
+    .tab.active { background: var(--accent); color: white; box-shadow: 0 4px 12px rgba(255, 51, 133, 0.3); }
 
-    .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 25px; }
-    .kpi-card { background: var(--bg-card); padding: 12px; border-radius: 18px; text-align: center; box-shadow: 0 4px 12px var(--shadow); border-bottom: 5px solid; }
-    .kpi-card p { margin: 0; font-size: 10px; font-weight: 700; color: var(--text-sub); text-transform: uppercase; }
-    .kpi-card h3 { margin: 4px 0; font-size: 18px; color: var(--text-main); }
+    .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 30px; }
+    .kpi-card { background: var(--bg-card); padding: 15px; border-radius: 22px; text-align: center; box-shadow: 0 6px 15px var(--shadow); border-bottom: 5px solid; transition: transform 0.2s; }
+    .kpi-card:hover { transform: translateY(-3px); }
+    .kpi-card p { margin: 0; font-size: 10px; font-weight: 700; color: var(--text-sub); text-transform: uppercase; letter-spacing: 1px; }
+    .kpi-card h3 { margin: 6px 0; font-size: 22px; color: var(--text-main); }
 
-    .filter-container { background: var(--bg-card); padding: 20px; border-radius: 25px; box-shadow: 0 5px 20px var(--shadow); margin-bottom: 25px; }
-    .filter-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; align-items: end; }
-    .filter-group label { display: block; font-weight: 700; font-size: 11px; margin-bottom: 6px; color: var(--text-sub); }
-    .filter-group input, .filter-group select { width: 100%; padding: 10px; border: 1.5px solid var(--border-color); border-radius: 10px; background: var(--bg-body); color: var(--text-main); box-sizing: border-box; font-family: 'Poppins'; font-size: 13px; }
+    .filter-container { background: var(--bg-card); padding: 25px; border-radius: 28px; box-shadow: 0 8px 30px var(--shadow); margin-bottom: 30px; border: 1px solid var(--border-color); }
+    .filter-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; align-items: end; }
+    .filter-group label { display: block; font-weight: 700; font-size: 11px; margin-bottom: 8px; color: var(--text-sub); text-transform: uppercase; }
+    .filter-group input, .filter-group select { width: 100%; padding: 12px; border: 2px solid var(--border-color); border-radius: 12px; background: var(--bg-body); color: var(--text-main); box-sizing: border-box; font-family: 'Poppins'; font-size: 13px; transition: border-color 0.3s; }
+    .filter-group input:focus, .filter-group select:focus { border-color: var(--accent); outline: none; }
 
-    .btn { border: none; padding: 12px; border-radius: 12px; cursor: pointer; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; font-family: 'Poppins'; font-size: 14px; }
+    .btn { border: none; padding: 14px; border-radius: 14px; cursor: pointer; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; font-family: 'Poppins'; font-size: 14px; transition: all 0.2s; }
+    .btn:active { transform: scale(0.97); }
     .btn-filter { background: #00acee; color: white; }
     .btn-clear { background: var(--border-color); color: var(--text-sub); }
-    .btn-add { background: #ff3385; color: white; padding: 15px; margin-top: 15px; font-size: 16px; box-shadow: 0 4px 15px rgba(255, 51, 133, 0.3); }
+    .btn-add { background: var(--accent); color: white; padding: 18px; margin-top: 20px; font-size: 16px; box-shadow: 0 6px 20px rgba(255, 51, 133, 0.4); }
 
-    .separator { text-align: center; margin: 30px 0; font-weight: 700; color: var(--text-main); font-size: 18px; letter-spacing: 1px; }
-    .separator::after { content: ""; display: block; width: 50px; height: 3px; background: #ff3385; margin: 8px auto; border-radius: 2px; }
+    .separator { text-align: center; margin: 40px 0; font-weight: 700; color: var(--text-main); font-size: 20px; letter-spacing: 1px; }
+    .separator::after { content: ""; display: block; width: 60px; height: 4px; background: var(--accent); margin: 10px auto; border-radius: 2px; }
 
-    /* CARDS */
-    .order-card { background: var(--bg-card); border-radius: 22px; margin-bottom: 25px; box-shadow: 0 8px 20px var(--shadow); overflow: hidden; border: 1px solid var(--border-color); }
+    /* CARDS UI/UX PREMIUM */
+    .order-card { background: var(--bg-card); border-radius: 26px; margin-bottom: 30px; box-shadow: 0 10px 25px var(--shadow); overflow: hidden; border: 1px solid var(--border-color); transition: all 0.3s ease; position: relative; }
+    .order-card:hover { box-shadow: 0 15px 35px var(--shadow); }
     
-    .status-p-comprar { background-color: rgba(227, 242, 253, 0.4) !important; }
-    .status-comprado { background-color: rgba(241, 248, 233, 0.4) !important; border: 2px solid #8bc34a; }
-    .status-em-producao { background-color: rgba(255, 253, 231, 0.4) !important; }
-    .status-produzido { background-color: rgba(255, 249, 196, 0.6) !important; }
-    .status-etiq-liberada { background-color: rgba(255, 249, 196, 0.6) !important; color: #2e7d32 !important; }
-    .status-etiq-impressa { background-color: rgba(255, 249, 196, 0.6) !important; color: #9e9e9e !important; font-style: italic; font-weight: 300; }
-    .status-reagendado { background-color: rgba(255, 243, 224, 0.6) !important; border: 1px solid #ffb74d; }
+    /* CORES DE STATUS SUAVES */
+    .status-p-comprar { background: linear-gradient(to right, rgba(227, 242, 253, 0.5), var(--bg-card)) !important; }
+    .status-comprado { background: linear-gradient(to right, rgba(241, 248, 233, 0.6), var(--bg-card)) !important; border-left: 8px solid #8bc34a; }
+    .status-em-producao { background: linear-gradient(to right, rgba(255, 253, 231, 0.6), var(--bg-card)) !important; }
+    .status-produzido { background: linear-gradient(to right, rgba(255, 249, 196, 0.7), var(--bg-card)) !important; }
+    .status-reagendado { background: linear-gradient(to right, rgba(255, 243, 224, 0.7), var(--bg-card)) !important; border-left: 8px solid #ffb74d; }
 
-    body.dark-mode .status-p-comprar { background-color: rgba(30, 136, 229, 0.1) !important; }
-    body.dark-mode .status-comprado { background-color: rgba(104, 159, 56, 0.1) !important; }
+    /* ESTILO ENVIADOS (FINALIZADOS) */
+    .order-card.finalizado { opacity: 0.7; filter: grayscale(0.3); }
+    .order-card.finalizado .data-value, .order-card.finalizado .chk-item { font-size: 11px; font-style: italic; color: #999 !important; }
 
-    .nome-comprado { color: #2e7d32 !important; text-decoration: underline; }
-    .order-header { background: #007bff; color: white; padding: 10px 25px; display: inline-block; border-radius: 0 0 18px 0; font-weight: 700; font-size: 12px; }
-    .card-content { padding: 20px 25px; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px; border-bottom: 1px solid var(--border-color); }
-    .data-label { font-size: 10px; color: var(--text-sub); font-weight: 700; }
-    .data-value { font-size: 13px; font-weight: 700; color: var(--text-main); }
-    .status-box { border-left: 1.5px solid var(--border-color); padding-left: 15px; }
-    .chk-item { display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 600; margin-bottom: 5px; cursor: pointer; color: var(--text-main); }
+    .nome-comprado { color: #2e7d32 !important; font-weight: 800; }
+    .order-header { background: #4a90e2; color: white; padding: 12px 30px; display: inline-block; border-radius: 0 0 22px 0; font-weight: 800; font-size: 13px; box-shadow: 2px 2px 8px rgba(0,0,0,0.1); }
+    .card-content { padding: 25px 30px; display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 25px; border-bottom: 1px solid var(--border-color); }
+    .data-label { font-size: 10px; color: var(--text-sub); font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+    .data-value { font-size: 14px; font-weight: 700; color: var(--text-main); }
+    .status-box { border-left: 2px solid var(--border-color); padding-left: 20px; }
+    .chk-item { display: flex; align-items: center; gap: 10px; font-size: 12px; font-weight: 600; margin-bottom: 8px; cursor: pointer; color: var(--text-main); transition: color 0.2s; }
+    .chk-item:hover { color: var(--accent); }
+    .chk-item input { width: 18px; height: 18px; cursor: pointer; accent-color: var(--accent); }
 
-    #modalCadastro { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:9999; backdrop-filter: blur(3px); }
-    .modal-body { background: var(--bg-card); color: var(--text-main); width: 95%; max-width: 850px; margin: 30px auto; padding: 25px; border-radius: 25px; max-height: 90vh; overflow-y: auto; box-sizing: border-box; }
-    .item-form-row { background: var(--bg-body); border: 1px solid var(--border-color); padding: 12px; border-radius: 15px; margin-bottom: 12px; }
-    .obs-box { background: var(--bg-body); border: 1.5px solid var(--border-color); border-radius: 15px; padding: 12px; font-size: 11px; color: var(--text-sub); }
-    .btn-side { width: 100%; padding: 8px; border-radius: 8px; border: none; font-size: 10px; font-weight: 700; cursor: pointer; color: white; margin-bottom: 6px; }
+    /* CORES DE TEXTO DINÂMICAS */
+    .color-text { font-weight: 800; text-transform: uppercase; }
+    .color-BRANCO { color: #888; text-shadow: 0 0 1px #000; }
+    .color-PRETO { color: #000; }
+    .color-CINZA { color: #757575; }
+    .color-AZUL { color: #1976d2; }
+    .color-VERDE { color: #388e3c; }
+    .color-VERMELHO { color: #d32f2f; }
+    .color-VINHO { color: #880e4f; }
+    .color-LARANJA { color: #f57c00; }
+    .color-AMARELO { color: #fbc02d; }
+    .color-PINK { color: #c2185b; }
+
+    /* MODAL */
+    #modalCadastro { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999; backdrop-filter: blur(6px); }
+    .modal-body { background: var(--bg-card); color: var(--text-main); width: 95%; max-width: 900px; margin: 20px auto; padding: 35px; border-radius: 35px; max-height: 92vh; overflow-y: auto; box-sizing: border-box; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+    .item-form-row { background: var(--bg-body); border: 1px solid var(--border-color); padding: 20px; border-radius: 20px; margin-bottom: 15px; box-shadow: 0 4px 10px var(--shadow); }
+    .obs-box { background: var(--bg-body); border: 2px solid var(--border-color); border-radius: 18px; padding: 15px; font-size: 12px; color: var(--text-sub); position: relative; }
+    
+    .btn-action { border: none; padding: 10px; border-radius: 10px; font-size: 11px; font-weight: 800; cursor: pointer; color: white; margin-bottom: 8px; transition: opacity 0.2s; }
+    .btn-action:hover { opacity: 0.8; }
+    .btn-delete { background: #ff5252; position: absolute; top: 15px; right: 15px; padding: 8px 12px; border-radius: 10px; }
   </style>
 </head>
 <body>
 
 <div class="container">
-  <button class="btn-dark-toggle" onclick="toggleDarkMode()" title="Modo Noturno">🌙</button>
+  <button class="btn-dark-toggle" onclick="toggleDarkMode()" id="darkModeBtn">🌙</button>
 
   <div class="tabs">
-    <div class="tab active" id="tabAtivos" onclick="mudarAba('ATIVOS')">PEDIDOS ATIVOS</div>
-    <div class="tab" id="tabEnviados" onclick="mudarAba('ENVIADOS')">HISTÓRICO ENVIADOS</div>
+    <div class="tab active" id="tabAtivos" onclick="mudarAba('ATIVOS')">📦 PEDIDOS ATIVOS</div>
+    <div class="tab" id="tabEnviados" onclick="mudarAba('ENVIADOS')">✅ HISTÓRICO ENVIADOS</div>
   </div>
 
   <!-- KPI DASHBOARD -->
@@ -102,89 +128,89 @@
   <!-- FILTERS -->
   <div class="filter-container">
     <div class="filter-grid">
-      <div class="filter-group"><label>BUSCA</label><input type="text" id="filtroBusca" placeholder="🔍 Nome ou ID"></div>
-      <div class="filter-group"><label>STATUS</label>
+      <div class="filter-group"><label>BUSCA RÁPIDA</label><input type="text" id="filtroBusca" placeholder="🔍 Nome, Apelido ou ID do Pedido"></div>
+      <div class="filter-group"><label>FILTRAR POR STATUS</label>
         <select id="filtroStatus">
-          <option value="">Todos</option>
-          <option value="COMPRADO">COMPRADO</option>
-          <option value="MATRIZ">MATRIZ</option>
-          <option value="AMOSTRA">AMOSTRA</option>
-          <option value="EM_PRODUCAO">EM PRODUÇÃO</option>
-          <option value="PRODUZIDO">PRODUZIDO</option>
-          <option value="ETIQ_LIBERADA">ETIQ. LIBERADA</option>
-          <option value="P_COMPRAR">P/ COMPRAR</option>
+          <option value="">Todos os Status</option>
+          <option value="COMPRADO">✅ COMPRADO</option>
+          <option value="MATRIZ">🧵 MATRIZ</option>
+          <option value="AMOSTRA">👕 AMOSTRA</option>
+          <option value="EM_PRODUCAO">⚙️ EM PRODUÇÃO</option>
+          <option value="PRODUZIDO">📦 PRODUZIDO</option>
+          <option value="ETIQ_LIBERADA">🏷️ ETIQ. LIBERADA</option>
+          <option value="P_COMPRAR">🛒 P/ COMPRAR</option>
         </select>
       </div>
-      <div class="filter-group"><label>DATA</label><input type="date" id="filtroData"></div>
-      <div class="filter-group"><label>SEMANA</label>
+      <div class="filter-group"><label>FILTRAR POR DATA</label><input type="date" id="filtroData"></div>
+      <div class="filter-group"><label>SEMANA DO PEDIDO</label>
         <select id="filtroSemana">
-          <option value="">Semana</option>
+          <option value="">Ver Todas as Semanas</option>
           <option>SEGUNDA</option><option>TERÇA</option><option>QUARTA</option><option>QUINTA</option><option>SEXTA</option><option>SÁBADO</option>
         </select>
       </div>
-      <div style="display: flex; gap: 8px;">
+      <div style="display: flex; gap: 10px;">
         <button class="btn btn-filter" onclick="filtrar()">🔍 FILTRAR</button>
         <button class="btn btn-clear" onclick="limpar()">🧹 LIMPAR</button>
       </div>
     </div>
-    <button class="btn btn-add" id="btnAddPedido" onclick="abrirModal()">+ CADASTRAR NOVO PEDIDO</button>
+    <button class="btn btn-add" id="btnAddPedido" onclick="abrirModal()">🚀 CADASTRAR NOVA VENDA</button>
   </div>
 
-  <div class="separator" id="tituloLista">LISTA DE PEDIDOS ATIVOS</div>
-  <div id="listaPedidos"><div class="msg-vazio">Carregando...</div></div>
+  <div class="separator" id="tituloLista">PEDIDOS ATIVOS NO SISTEMA</div>
+  <div id="listaPedidos"><div class="msg-vazio">Sincronizando com a planilha...</div></div>
 </div>
 
   <!-- MODAL DE CADASTRO -->
   <div id="modalCadastro">
     <div class="modal-body">
-      <h2 id="modalTitle" style="color:#ff3385; margin: 0 0 20px 0; font-size: 20px; font-weight: 700;">Novo Pedido</h2>
+      <h2 id="modalTitle" style="color:var(--accent); margin: 0 0 25px 0; font-size: 24px; font-weight: 800;">Novo Pedido</h2>
       <input type="hidden" id="editPedidoId">
       <div class="form-grid">
-        <div><label class="data-label">LOJA</label>
+        <div><label class="data-label">LOJA ORIGEM</label>
           <select id="cLoja">
-            <option value="FF">FF</option><option value="PART">PART</option>
+            <option value="FF">FF PERSONALIZAÇÕES</option><option value="PART">PARTICULAR</option>
           </select>
         </div>
-        <div><label class="data-label">LOCAL</label>
+        <div><label class="data-label">LOCAL DA LOGO</label>
           <select id="cLocal">
-            <option value="FT">FT</option><option value="CT/FT">CT/FT</option>
-            <option value="2MG/CT/FT">2MG/CT/FT</option><option value="BOLSO">BOLSO</option>
+            <option value="FT">FRENTE (FT)</option><option value="CT/FT">COSTA/FRENTE (CT/FT)</option>
+            <option value="2MG/CT/FT">2 MANGAS/CT/FT</option><option value="BOLSO">BOLSO</option>
             <option value="BOLSO/CT">BOLSO/CT</option><option value="BOLSO/CT/FT">BOLSO/CT/FT</option>
             <option value="BOLSO/CT/FT/MG">BOLSO/CT/FT/MG</option>
           </select>
         </div>
-        <div><label class="data-label">LOGO</label><input type="text" id="cLogo" placeholder="Logo"></div>
-        <div><label class="data-label">NOME CLIENTE</label><input type="text" id="cNome" placeholder="Nome"></div>
-        <div><label class="data-label">APELIDO</label><input type="text" id="cApelido" placeholder="Apelido"></div>
+        <div><label class="data-label">NOME DA LOGO</label><input type="text" id="cLogo" placeholder="Ex: Logo Cliente X"></div>
+        <div><label class="data-label">NOME DO CLIENTE</label><input type="text" id="cNome" placeholder="Nome Completo"></div>
+        <div><label class="data-label">APELIDO / REFERÊNCIA</label><input type="text" id="cApelido" placeholder="Como o cliente é conhecido"></div>
         <div>
-          <label class="data-label">DATA ENTREGA</label>
-          <div style="display:flex; gap:8px;">
+          <label class="data-label">DATA DE ENTREGA</label>
+          <div style="display:flex; gap:10px;">
             <input type="date" id="cData" onchange="setSemana()" style="flex:2;">
-            <input type="text" id="cSemana" placeholder="Sem" readonly style="flex:1; background:var(--bg-body); text-align: center; font-weight: 700;">
+            <input type="text" id="cSemana" placeholder="DIA" readonly style="flex:1; background:var(--bg-body); text-align: center; font-weight: 800; color: var(--accent);">
           </div>
         </div>
       </div>
       
-      <div style="background: var(--bg-body); padding: 15px; border-radius: 20px; border: 1px solid var(--border-color);">
-        <h4 style="margin: 0 0 15px 0; font-size: 15px; color: var(--text-sub);">Produtos da Venda</h4>
+      <div style="background: var(--bg-body); padding: 25px; border-radius: 25px; border: 2px solid var(--border-color);">
+        <h4 style="margin: 0 0 20px 0; font-size: 16px; color: var(--text-main); font-weight: 800;">📋 Itens da Venda</h4>
         <div id="itensPedidoContainer"></div>
-        <div style="display: flex; gap: 10px; margin-top: 10px;">
-          <button onclick="addLinhaForm()" style="flex: 1; padding: 10px; border: 1.5px dashed var(--text-sub); border-radius: 12px; cursor: pointer; background: var(--bg-card); color: var(--text-sub);">+ ADICIONAR LINHA</button>
-          <button onclick="duplicarLinhaForm()" style="flex: 1; padding: 10px; border: 1.5px dashed var(--text-sub); border-radius: 12px; cursor: pointer; background: var(--bg-card); color: var(--text-sub);">📋 DUPLICAR ÚLTIMA LINHA</button>
+        <div style="display: flex; gap: 15px; margin-top: 15px;">
+          <button onclick="addLinhaForm()" style="flex: 1; padding: 12px; border: 2px dashed var(--text-sub); border-radius: 15px; cursor: pointer; background: var(--bg-card); color: var(--text-sub); font-weight: 700;">+ ADICIONAR PRODUTO</button>
+          <button onclick="duplicarLinhaForm()" style="flex: 1; padding: 12px; border: 2px dashed var(--text-sub); border-radius: 15px; cursor: pointer; background: var(--bg-card); color: var(--text-sub); font-weight: 700;">📋 CLONAR ÚLTIMO ITEM</button>
         </div>
       </div>
 
-      <div style="margin-top:20px; display: flex; gap: 20px; align-items: center;">
-        <label class="chk-item" style="color: #007bff;"><input type="checkbox" id="cPComprar"> MARCAR "P/ COMPRAR"</label>
-        <div id="boxReagendado" style="display: flex; align-items: center; gap: 10px;">
-          <label class="chk-item" style="color: orange;"><input type="checkbox" id="cReagendado" onchange="toggleReagendado()"> REAGENDADO</label>
-          <input type="date" id="cDataReagendado" style="display: none; padding: 5px; border: 1px solid orange; border-radius: 8px;">
+      <div style="margin-top:25px; display: flex; gap: 30px; align-items: center; background: var(--bg-body); padding: 15px; border-radius: 15px;">
+        <label class="chk-item" style="color: #007bff; margin:0;"><input type="checkbox" id="cPComprar"> 🛒 MARCAR PARA COMPRAR</label>
+        <div id="boxReagendado" style="display: flex; align-items: center; gap: 15px;">
+          <label class="chk-item" style="color: orange; margin:0;"><input type="checkbox" id="cReagendado" onchange="toggleReagendado()"> 🗓️ REAGENDADO</label>
+          <input type="date" id="cDataReagendado" style="display: none; padding: 8px; border: 2px solid orange; border-radius: 10px;">
         </div>
       </div>
 
-      <div style="margin-top: 25px; display: flex; flex-direction: column; gap: 12px;">
-        <button class="btn btn-add" id="btnSalvar" onclick="salvar()">FINALIZAR E SALVAR</button>
-        <button class="btn btn-clear" onclick="fecharModal()">CANCELAR</button>
+      <div style="margin-top: 35px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+        <button class="btn btn-add" id="btnSalvar" onclick="salvar()" style="margin-top:0;">💾 FINALIZAR E SALVAR</button>
+        <button class="btn btn-clear" onclick="fecharModal()">❌ CANCELAR</button>
       </div>
     </div>
   </div>
@@ -196,7 +222,7 @@
 
   function toggleDarkMode() {
     document.body.classList.toggle('dark-mode');
-    const btn = document.querySelector('.btn-dark-toggle');
+    const btn = document.getElementById('darkModeBtn');
     btn.innerText = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
   }
 
@@ -204,14 +230,14 @@
     abaAtual = aba;
     document.getElementById('tabAtivos').classList.toggle('active', aba === 'ATIVOS');
     document.getElementById('tabEnviados').classList.toggle('active', aba === 'ENVIADOS');
-    document.getElementById('tituloLista').innerText = aba === 'ATIVOS' ? 'LISTA DE PEDIDOS ATIVOS' : 'HISTÓRICO DE PEDIDOS ENVIADOS';
+    document.getElementById('tituloLista').innerText = aba === 'ATIVOS' ? 'PEDIDOS ATIVOS NO SISTEMA' : 'HISTÓRICO DE PEDIDOS FINALIZADOS';
     document.getElementById('btnAddPedido').style.display = aba === 'ATIVOS' ? 'block' : 'none';
     carregar();
   }
 
   function carregar() {
     if (!WEB_APP_URL) return;
-    document.getElementById('listaPedidos').innerHTML = '<div class="msg-vazio">Buscando dados...</div>';
+    document.getElementById('listaPedidos').innerHTML = '<div class="msg-vazio">Sincronizando...</div>';
     const script = document.createElement('script');
     script.src = WEB_APP_URL + '?action=getDados&tipo=' + abaAtual + '&callback=handleResponse';
     document.body.appendChild(script);
@@ -222,21 +248,15 @@
       dadosBrutos = res.pedidos;
       renderizar(res.pedidos, res.kpis);
     } else {
-      document.getElementById('listaPedidos').innerHTML = '<div class="msg-vazio">Nenhum pedido encontrado nesta aba.</div>';
+      document.getElementById('listaPedidos').innerHTML = '<div class="msg-vazio">Nenhum registro encontrado.</div>';
     }
   };
 
   function renderizar(pedidos, kpis) {
     if (kpis) {
-      document.getElementById('k-ts').innerText = kpis.totalSemana;
-      document.getElementById('k-td').innerText = kpis.totalDia;
-      document.getElementById('k-ep').innerText = kpis.emProducao;
-      document.getElementById('k-pr').innerText = kpis.produzido;
-      document.getElementById('k-el').innerText = kpis.etiqLiberada;
-      document.getElementById('k-ei').innerText = kpis.etiqImpressa;
-      document.getElementById('k-ev').innerText = kpis.enviados;
-      document.getElementById('k-re').innerText = kpis.reagendado;
-      document.getElementById('k-pc').innerText = kpis.paraComprar;
+      const ids = ['k-ts','k-td','k-ep','k-pr','k-el','k-ei','k-ev','k-re','k-pc'];
+      const vals = [kpis.totalSemana, kpis.totalDia, kpis.emProducao, kpis.produzido, kpis.etiqLiberada, kpis.etiqImpressa, kpis.enviados, kpis.reagendado, kpis.paraComprar];
+      ids.forEach((id, i) => document.getElementById(id).innerText = vals[i]);
     }
     const container = document.getElementById('listaPedidos');
     container.innerHTML = '';
@@ -251,95 +271,114 @@
       const itens = grupos[id];
       const p = itens[0];
       
-      let statusClass = '';
-      if (p.P_COMPRAR == 'TRUE') statusClass = 'status-p-comprar';
-      if (p.REAGENDADO == 'TRUE') statusClass = 'status-reagendado';
-      if (p.EM_PRODUCAO == 'TRUE') statusClass = 'status-em-producao';
-      if (p.PRODUZIDO == 'TRUE') statusClass = 'status-produzido';
-      if (p.ETIQ_LIBERADA == 'TRUE') statusClass = 'status-etiq-liberada';
-      if (p.ETIQ_IMPRESSA == 'TRUE') statusClass = 'status-etiq-impressa';
-      if (p.COMPRADO == 'TRUE') statusClass = 'status-comprado';
+      let statusClass = abaAtual === 'ENVIADOS' ? 'finalizado' : '';
+      if (abaAtual === 'ATIVOS') {
+        if (p.P_COMPRAR == 'TRUE') statusClass = 'status-p-comprar';
+        if (p.REAGENDADO == 'TRUE') statusClass = 'status-reagendado';
+        if (p.EM_PRODUCAO == 'TRUE') statusClass = 'status-em-producao';
+        if (p.PRODUZIDO == 'TRUE') statusClass = 'status-produzido';
+        if (p.COMPRADO == 'TRUE') statusClass = 'status-comprado';
+      }
 
       container.innerHTML += `
         <div class="order-card ${statusClass}">
-          <div class="order-header">PEDIDO: ${p.ID}</div>
+          <button class="btn-delete" onclick="excluirPedido('${id}')" title="Excluir Pedido">🗑️</button>
+          <div class="order-header">PEDIDO #${p.ID}</div>
           <div class="card-content">
             <div>
-              <div class="data-label">LOJA / LOCAL</div>
-              <div class="data-value">${p.LOJA} - ${p.LOCAL}</div>
+              <div class="data-label">ORIGEM / LOCAL</div>
+              <div class="data-value">${p.LOJA} • ${p.LOCAL}</div>
               <br>
-              <div class="data-label">LOGO</div>
+              <div class="data-label">LOGO MARCA</div>
               <div class="data-value">${p.LOGO}</div>
             </div>
             <div>
-              <div class="data-label">CLIENTE / APELIDO</div>
-              <div class="data-value ${p.COMPRADO == 'TRUE' ? 'nome-comprado' : ''}">${p.NOME} (${p.APELIDO})</div>
-              <br>
-              <div class="data-label">ENTREGA</div>
-              <div class="data-value" style="color:#ff3385">
-                ${p.DATA} (${p.SEMANA})
-                ${p.REAGENDADO == 'TRUE' ? `<br><span style="font-size:10px; background:orange; color:white; padding:3px 7px; border-radius:6px; margin-top:5px; display:inline-block;">REAGENDADO: ${p.DATA_REAGENDADO || ''}</span>` : ''}
+              <div class="data-label">CLIENTE</div>
+              <div class="data-value ${p.COMPRADO == 'TRUE' ? 'nome-comprado' : ''}">${p.NOME}</div>
+              <div class="data-label" style="margin-top:4px;">APELIDO: ${p.APELIDO}</div>
+            </div>
+            <div>
+              <div class="data-label">ENTREGA PREVISTA</div>
+              <div class="data-value" style="color:var(--accent)">
+                ${p.DATA} <span style="font-size:11px;">(${p.SEMANA})</span>
+                ${p.REAGENDADO == 'TRUE' ? `<br><span style="font-size:10px; background:orange; color:white; padding:4px 8px; border-radius:8px; margin-top:8px; display:inline-block; font-weight:800;">🗓️ REAGENDADO: ${p.DATA_REAGENDADO}</span>` : ''}
               </div>
             </div>
             <div class="status-box">
               ${chk(p.rowIndex, 'COMPRADO',  p.COMPRADO)}
               ${chk(p.rowIndex, 'MATRIZ',    p.MATRIZ)}
               ${chk(p.rowIndex, 'AMOSTRA',   p.AMOSTRA)}
-              ${chkReag(p.rowIndex, p.REAGENDADO, p.DATA_REAGENDADO)}
+              ${chkReag(p.rowIndex, p.REAGENDADO)}
             </div>
             <div class="status-box">
               ${chk(p.rowIndex, 'EM_PRODUCAO',   p.EM_PRODUCAO)}
               ${chk(p.rowIndex, 'PRODUZIDO',     p.PRODUZIDO)}
               ${chk(p.rowIndex, 'ETIQ_LIBERADA', p.ETIQ_LIBERADA)}
-              ${chk(p.rowIndex, 'ETIQ_IMPRESSA', p.ETIQ_IMPRESSA)}
               ${chk(p.rowIndex, 'ENVIADO',       p.ENVIADO)}
             </div>
-            <div style="text-align:right">
-              <div class="chk-item">
+            <div style="text-align:right; display: flex; flex-direction: column; justify-content: center;">
+              <div class="chk-item" style="justify-content: flex-end; margin-bottom: 12px;">
+                <span style="color:var(--accent); font-weight:800;">P/ COMPRAR</span>
                 <input type="checkbox" ${p.P_COMPRAR == 'TRUE' ? 'checked' : ''} onchange="atualizar(${p.rowIndex}, 'P_COMPRAR', this.checked)">
-                <span style="color:#ff3385">P/ COMPRAR</span>
               </div>
-              <button class="btn-side" style="background:#007bff" onclick="abrirEdicao('${id}')">EDITAR</button>
-              <button class="btn-side" style="background:#ff3385" onclick="duplicarPedido('${id}')">DUPLICAR</button>
+              <button class="btn-action" style="background:#4a90e2" onclick="abrirEdicao('${id}')">✏️ EDITAR</button>
+              <button class="btn-action" style="background:var(--accent)" onclick="duplicarPedido('${id}')">📋 CLONAR</button>
             </div>
           </div>
-          <div style="padding:15px 25px; display:grid; grid-template-columns: 2fr 1fr; gap:20px;">
+          <div style="padding:20px 30px; display:grid; grid-template-columns: 2fr 1fr; gap:30px; background: rgba(0,0,0,0.02);">
             <table style="width:100%; border-collapse: collapse;">
               <thead>
-                <tr style="font-size:10px; color:var(--text-sub); text-align:left; border-bottom: 1px solid var(--border-color);">
-                  <th style="padding-bottom:5px;">QTD</th><th style="padding-bottom:5px;">PRODUTO</th><th style="padding-bottom:5px;">COR</th><th style="padding-bottom:5px;">TAM</th>
+                <tr style="font-size:10px; color:var(--text-sub); text-align:left; border-bottom: 2px solid var(--border-color);">
+                  <th style="padding-bottom:8px;">QTD</th><th style="padding-bottom:8px;">PRODUTO</th><th style="padding-bottom:8px;">COR</th><th style="padding-bottom:8px;">TAM</th>
                 </tr>
               </thead>
               <tbody>
                 ${itens.map(i => `
-                  <tr>
-                    <td style="font-size:12px; font-weight:700; padding:8px 0; color:var(--text-main);">${i.QTD}</td>
-                    <td style="font-size:12px; font-weight:700; color:var(--text-main);">${i.PRODUTO}</td>
-                    <td style="font-size:12px; font-weight:700; color:#007bff">${i.COR}</td>
-                    <td style="font-size:12px; font-weight:700; color:var(--text-main);">${i.TAMANHO}</td>
+                  <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="font-size:13px; font-weight:800; padding:12px 0; color:var(--text-main);">${i.QTD}</td>
+                    <td style="font-size:13px; font-weight:700; color:var(--text-main);">${i.PRODUTO}</td>
+                    <td style="font-size:13px; font-weight:800;"><span class="color-text color-${getColorKey(i.COR)}">${i.COR}</span></td>
+                    <td style="font-size:13px; font-weight:800; color:var(--text-main);">${i.TAMANHO}</td>
                   </tr>`).join('')}
               </tbody>
             </table>
             <div class="obs-box">
-              <div style="position:absolute; top:-8px; left:12px; background:var(--bg-card); font-size:10px; padding:0 6px; font-weight:700;">OBSERVAÇÕES</div>
-              ${p.OBS || ''}
+              <div style="position:absolute; top:-10px; left:15px; background:var(--bg-card); font-size:10px; padding:0 8px; font-weight:800; color:var(--accent);">ANOTAÇÕES</div>
+              ${p.OBS || '<span style="color:#ccc; font-style:italic;">Sem observações para este pedido.</span>'}
             </div>
           </div>
         </div>`;
     }
   }
 
-  function chk(row, campo, val) {
-    return `<label class="chk-item"><input type="checkbox" ${val == 'TRUE' ? 'checked' : ''} onchange="atualizar(${row}, '${campo}', this.checked)"> ${campo.replace('_', ' ')}</label>`;
+  function getColorKey(cor) {
+    if (!cor) return '';
+    const c = cor.toUpperCase();
+    if (c.includes('BRANCO')) return 'BRANCO';
+    if (c.includes('PRETO')) return 'PRETO';
+    if (c.includes('AZUL')) return 'AZUL';
+    if (c.includes('VERDE')) return 'VERDE';
+    if (c.includes('VERMELHO')) return 'VERMELHO';
+    if (c.includes('CINZA')) return 'CINZA';
+    if (c.includes('VINHO')) return 'VINHO';
+    if (c.includes('LARANJA')) return 'LARANJA';
+    if (c.includes('AMARELO')) return 'AMARELO';
+    if (c.includes('PINK')) return 'PINK';
+    return '';
   }
 
-  function chkReag(row, val, data) {
+  function chk(row, campo, val) {
+    const label = campo.replace('_', ' ').replace('ETIQ ', 'ETIQ. ');
+    return `<label class="chk-item"><input type="checkbox" ${val == 'TRUE' ? 'checked' : ''} onchange="atualizar(${row}, '${campo}', this.checked)"> ${label}</label>`;
+  }
+
+  function chkReag(row, val) {
     return `<label class="chk-item"><input type="checkbox" ${val == 'TRUE' ? 'checked' : ''} onchange="promptReagendar(${row}, this.checked)"> REAGENDADO</label>`;
   }
 
   function promptReagendar(row, checked) {
     if (checked) {
-      const data = prompt("Data de Reagendamento (DD/MM/YYYY):");
+      const data = prompt("Nova Data de Entrega (DD/MM/YYYY):");
       if (data) atualizar(row, 'DATA_REAGENDADO', data);
       else carregar();
     } else {
@@ -357,8 +396,9 @@
     const status = document.getElementById('filtroStatus').value;
     const data = document.getElementById('filtroData').value;
     const semana = document.getElementById('filtroSemana').value;
+    
     const filtrados = dadosBrutos.filter(p => {
-      const matchBusca = !busca || (p.NOME && p.NOME.toLowerCase().includes(busca)) || (p.ID && String(p.ID).toLowerCase().includes(busca));
+      const matchBusca = !busca || (p.NOME && p.NOME.toLowerCase().includes(busca)) || (p.APELIDO && p.APELIDO.toLowerCase().includes(busca)) || (p.ID && String(p.ID).toLowerCase().includes(busca));
       const matchStatus = !status || p[status] == 'TRUE';
       let matchData = true;
       if (data) {
@@ -402,14 +442,14 @@
     const row = document.createElement('div');
     row.className = 'item-form-row';
     row.innerHTML = `
-      <div style="display: grid; grid-template-columns: 70px 1.5fr 1fr 80px auto; gap: 10px; align-items: center;">
-        <input type="number" class="iQtd" placeholder="Qtd" min="1" value="${qtd}" style="width:100%; padding:10px; border:1px solid var(--border-color); border-radius:10px; background:var(--bg-card); color:var(--text-main);">
-        <select class="iProd" style="width:100%; padding:10px; border:1px solid var(--border-color); border-radius:10px; background:var(--bg-card); color:var(--text-main);"><option value="">Produto</option><option ${prod=='POLO BÁSICA'?'selected':''}>POLO BÁSICA</option><option ${prod=='BABYLOOK POLO'?'selected':''}>BABYLOOK POLO</option><option ${prod=='CAMISETA BÁSICA'?'selected':''}>CAMISETA BÁSICA</option><option ${prod=='CAMISETA POLIÉSTER'?'selected':''}>CAMISETA POLIÉSTER</option><option ${prod=='CAMISETA BABYLOOK FEMININA'?'selected':''}>CAMISETA BABYLOOK FEMININA</option></select>
-        <select class="iCor" style="width:100%; padding:10px; border:1px solid var(--border-color); border-radius:10px; background:var(--bg-card); color:var(--text-main);"><option value="">Cor</option><option ${cor=='BRANCO'?'selected':''}>BRANCO</option><option ${cor=='PRETO'?'selected':''}>PRETO</option><option ${cor=='CINZA MESCLA'?'selected':''}>CINZA MESCLA</option><option ${cor=='CINZA ESCURO'?'selected':''}>CINZA ESCURO</option><option ${cor=='AZUL TURQUESA'?'selected':''}>AZUL TURQUESA</option><option ${cor=='AZUL ROYAL'?'selected':''}>AZUL ROYAL</option><option ${cor=='AZUL MARINHO'?'selected':''}>AZUL MARINHO</option><option ${cor=='VERDE BANDEIRA'?'selected':''}>VERDE BANDEIRA</option><option ${cor=='VERDE LIMÃO'?'selected':''}>VERDE LIMÃO</option><option ${cor=='VERDE MUSGO'?'selected':''}>VERDE MUSGO</option><option ${cor=='VERMELHO'?'selected':''}>VERMELHO</option><option ${cor=='VINHO'?'selected':''}>VINHO</option><option ${cor=='LARANJA'?'selected':''}>LARANJA</option><option ${cor=='AMARELO'?'selected':''}>AMARELO</option><option ${cor=='PINK'?'selected':''}>PINK</option></select>
-        <select class="iTam" style="width:100%; padding:10px; border:1px solid var(--border-color); border-radius:10px; background:var(--bg-card); color:var(--text-main);"><option ${tam=='U'?'selected':''}>U</option><option ${tam=='P'?'selected':''}>P</option><option ${tam=='M'?'selected':''}>M</option><option ${tam=='G'?'selected':''}>G</option><option ${tam=='GG'?'selected':''}>GG</option><option ${tam=='EG'?'selected':''}>EG</option></select>
-        <button onclick="this.parentElement.parentElement.remove()" style="background:#ff3385; color:white; border:none; border-radius:8px; cursor:pointer; padding:10px; font-weight: bold;">X</button>
+      <div style="display: grid; grid-template-columns: 80px 1.5fr 1fr 90px auto; gap: 15px; align-items: center;">
+        <input type="number" class="iQtd" placeholder="Qtd" min="1" value="${qtd}" style="width:100%; padding:12px; border:2px solid var(--border-color); border-radius:12px; background:var(--bg-card); color:var(--text-main); font-weight:800;">
+        <select class="iProd" style="width:100%; padding:12px; border:2px solid var(--border-color); border-radius:12px; background:var(--bg-card); color:var(--text-main); font-weight:700;"><option value="">Produto</option><option ${prod=='POLO BÁSICA'?'selected':''}>POLO BÁSICA</option><option ${prod=='BABYLOOK POLO'?'selected':''}>BABYLOOK POLO</option><option ${prod=='CAMISETA BÁSICA'?'selected':''}>CAMISETA BÁSICA</option><option ${prod=='CAMISETA POLIÉSTER'?'selected':''}>CAMISETA POLIÉSTER</option><option ${prod=='CAMISETA BABYLOOK FEMININA'?'selected':''}>CAMISETA BABYLOOK FEMININA</option></select>
+        <select class="iCor" style="width:100%; padding:12px; border:2px solid var(--border-color); border-radius:12px; background:var(--bg-card); color:var(--text-main); font-weight:700;"><option value="">Cor</option><option ${cor=='BRANCO'?'selected':''}>BRANCO</option><option ${cor=='PRETO'?'selected':''}>PRETO</option><option ${cor=='CINZA MESCLA'?'selected':''}>CINZA MESCLA</option><option ${cor=='CINZA ESCURO'?'selected':''}>CINZA ESCURO</option><option ${cor=='AZUL TURQUESA'?'selected':''}>AZUL TURQUESA</option><option ${cor=='AZUL ROYAL'?'selected':''}>AZUL ROYAL</option><option ${cor=='AZUL MARINHO'?'selected':''}>AZUL MARINHO</option><option ${cor=='VERDE BANDEIRA'?'selected':''}>VERDE BANDEIRA</option><option ${cor=='VERDE LIMÃO'?'selected':''}>VERDE LIMÃO</option><option ${cor=='VERDE MUSGO'?'selected':''}>VERDE MUSGO</option><option ${cor=='VERMELHO'?'selected':''}>VERMELHO</option><option ${cor=='VINHO'?'selected':''}>VINHO</option><option ${cor=='LARANJA'?'selected':''}>LARANJA</option><option ${cor=='AMARELO'?'selected':''}>AMARELO</option><option ${cor=='PINK'?'selected':''}>PINK</option></select>
+        <select class="iTam" style="width:100%; padding:12px; border:2px solid var(--border-color); border-radius:12px; background:var(--bg-card); color:var(--text-main); font-weight:700;"><option ${tam=='U'?'selected':''}>U</option><option ${tam=='P'?'selected':''}>P</option><option ${tam=='M'?'selected':''}>M</option><option ${tam=='G'?'selected':''}>G</option><option ${tam=='GG'?'selected':''}>GG</option><option ${tam=='EG'?'selected':''}>EG</option></select>
+        <button onclick="this.parentElement.parentElement.remove()" style="background:var(--accent); color:white; border:none; border-radius:12px; cursor:pointer; padding:12px; font-weight: 900;">X</button>
       </div>
-      <input type="text" class="iObs" placeholder="Observação do item" value="${obs}" style="width:100%; padding:8px; border:1px solid var(--border-color); border-radius:8px; font-size:11px; margin-top:8px; background:var(--bg-card); color:var(--text-main);">`;
+      <input type="text" class="iObs" placeholder="Observação específica deste item..." value="${obs}" style="width:100%; padding:10px; border:1px solid var(--border-color); border-radius:10px; font-size:12px; margin-top:12px; background:var(--bg-card); color:var(--text-main);">`;
     container.appendChild(row);
   }
 
@@ -417,13 +457,7 @@
     const rows = document.querySelectorAll('.item-form-row');
     if (rows.length === 0) return addLinhaForm();
     const last = rows[rows.length - 1];
-    addLinhaForm(
-      last.querySelector('.iQtd').value,
-      last.querySelector('.iProd').value,
-      last.querySelector('.iCor').value,
-      last.querySelector('.iTam').value,
-      last.querySelector('.iObs').value
-    );
+    addLinhaForm(last.querySelector('.iQtd').value, last.querySelector('.iProd').value, last.querySelector('.iCor').value, last.querySelector('.iTam').value, last.querySelector('.iObs').value);
   }
 
   function setSemana() {
@@ -437,7 +471,7 @@
   function abrirEdicao(pedidoId) {
     const itens = dadosBrutos.filter(p => String(p.ID) === String(pedidoId));
     const p = itens[0];
-    document.getElementById('modalTitle').innerText = 'Editando Pedido ' + pedidoId;
+    document.getElementById('modalTitle').innerText = 'Editando Pedido #' + pedidoId;
     document.getElementById('editPedidoId').value = pedidoId;
     document.getElementById('cLoja').value = p.LOJA;
     document.getElementById('cLocal').value = p.LOCAL;
@@ -465,7 +499,7 @@
     const editId = document.getElementById('editPedidoId').value;
     const nome = document.getElementById('cNome').value.trim();
     const data = document.getElementById('cData').value;
-    if (!nome || !data) { alert('Nome e Data são obrigatórios.'); return; }
+    if (!nome || !data) { alert('Por favor, preencha Nome e Data.'); return; }
     
     const itens = Array.from(document.querySelectorAll('.item-form-row')).map(row => ({
       quantidade: row.querySelector('.iQtd').value,
@@ -475,7 +509,7 @@
       obs:        row.querySelector('.iObs').value
     })).filter(i => i.produto && i.quantidade);
 
-    if (itens.length === 0) { alert('Adicione ao menos um produto.'); return; }
+    if (itens.length === 0) { alert('Adicione ao menos um produto válido.'); return; }
     
     const d = data.split('-');
     const cab = {
@@ -493,7 +527,7 @@
     };
 
     btn.disabled = true;
-    btn.innerText = 'SALVANDO...';
+    btn.innerText = '⏳ SALVANDO...';
     await fetch(WEB_APP_URL, {
       method: 'POST',
       mode: 'no-cors',
@@ -502,7 +536,7 @@
     
     fecharModal();
     btn.disabled = false;
-    btn.innerText = 'FINALIZAR E SALVAR';
+    btn.innerText = '💾 FINALIZAR E SALVAR';
     setTimeout(carregar, 1500);
   }
 
@@ -515,11 +549,20 @@
   }
 
   function duplicarPedido(pedidoId) {
-    if (!confirm('Duplicar esta venda inteira?')) return;
+    if (!confirm('Deseja clonar esta venda inteira?')) return;
     fetch(WEB_APP_URL, {
       method: 'POST',
       mode: 'no-cors',
       body: JSON.stringify({ action: 'duplicarPedido', pedidoId: pedidoId })
+    }).then(() => setTimeout(carregar, 1000));
+  }
+
+  function excluirPedido(pedidoId) {
+    if (!confirm('⚠️ ATENÇÃO: Deseja realmente EXCLUIR este pedido permanentemente?')) return;
+    fetch(WEB_APP_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      body: JSON.stringify({ action: 'excluirPedido', pedidoId: pedidoId })
     }).then(() => setTimeout(carregar, 1000));
   }
 
