@@ -5,84 +5,49 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-body: #f4f7f6;
-      --bg-card: #ffffff;
-      --text-main: #2d3436;
-      --text-sub: #636e72;
-      --border-color: #dfe6e9;
-      --shadow: rgba(0,0,0,0.08);
-      --accent: #ff3385;
-      --card-p-comprar: #e3f2fd;
-      --card-comprado: #f1f8e9;
-      --card-producao: #fffde7;
-      --card-produzido: #fff9c4;
-      --card-reagendado: #fff3e0;
+      --bg-body: #f4f7f6; --bg-card: #ffffff; --text-main: #2d3436; --text-sub: #636e72; --border-color: #dfe6e9; --shadow: rgba(0,0,0,0.08); --accent: #ff3385;
+      --card-p-comprar: #e3f2fd; --card-comprado: #f1f8e9; --card-producao: #fffde7; --card-produzido: #fff9c4; --card-reagendado: #fff3e0;
     }
-
     body.dark-mode {
-      --bg-body: #0f172a;
-      --bg-card: #1e293b;
-      --text-main: #f1f5f9;
-      --text-sub: #94a3b8;
-      --border-color: #334155;
-      --shadow: rgba(0,0,0,0.4);
-      --card-p-comprar: #1e3a8a;
-      --card-comprado: #064e3b;
-      --card-producao: #78350f;
-      --card-produzido: #422006;
-      --card-reagendado: #7c2d12;
+      --bg-body: #0f172a; --bg-card: #1e293b; --text-main: #f1f5f9; --text-sub: #94a3b8; --border-color: #334155; --shadow: rgba(0,0,0,0.4);
+      --card-p-comprar: #1e3a8a; --card-comprado: #064e3b; --card-producao: #78350f; --card-produzido: #422006; --card-reagendado: #7c2d12;
     }
-
     body { font-family: 'Poppins', sans-serif; background-color: var(--bg-body); color: var(--text-main); margin: 0; padding: 20px 10px; transition: all 0.3s ease; }
     .container { max-width: 1400px; margin: 0 auto; position: relative; }
-
     .btn-dark-toggle { position: absolute; top: -10px; right: 0; background: var(--bg-card); border: 1px solid var(--border-color); padding: 12px; border-radius: 50%; cursor: pointer; box-shadow: 0 4px 12px var(--shadow); z-index: 100; font-size: 20px; }
-
     .tabs { display: flex; gap: 15px; margin-bottom: 25px; border-bottom: 2px solid var(--border-color); padding-bottom: 12px; }
     .tab { padding: 12px 25px; cursor: pointer; font-weight: 700; font-size: 14px; color: var(--text-sub); border-radius: 12px; transition: all 0.3s; }
     .tab.active { background: var(--accent); color: white; box-shadow: 0 4px 15px rgba(255, 51, 133, 0.4); }
-
-    .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 20px; }
+    .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 20px; }
     .kpi-card { background: var(--bg-card); padding: 12px; border-radius: 18px; text-align: center; box-shadow: 0 4px 10px var(--shadow); border-bottom: 4px solid; }
     .kpi-card p { margin: 0; font-size: 8px; font-weight: 700; color: var(--text-sub); text-transform: uppercase; letter-spacing: 1px; }
     .kpi-card h3 { margin: 2px 0; font-size: 18px; color: var(--text-main); }
-
     .filter-container { background: var(--bg-card); padding: 25px; border-radius: 20px; box-shadow: 0 6px 20px var(--shadow); margin-bottom: 25px; border: 1px solid var(--border-color); }
     .filter-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; align-items: end; }
     .filter-group label { display: block; font-weight: 800; font-size: 10px; margin-bottom: 8px; color: var(--text-sub); text-transform: uppercase; }
     .filter-group input, .filter-group select { width: 100%; padding: 12px; border: 2px solid var(--border-color); border-radius: 10px; background: var(--bg-body); color: var(--text-main); font-family: 'Poppins'; font-size: 12px; outline: none; box-sizing: border-box; }
-
     .btn { border: none; padding: 12px; border-radius: 12px; cursor: pointer; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; font-family: 'Poppins'; transition: all 0.2s; }
     .btn-filter { background: #00acee; color: white; width: 100%; }
     .btn-clear { background: var(--border-color); color: var(--text-sub); width: 100%; }
     .btn-add { background: var(--accent); color: white; padding: 16px; margin-top: 15px; font-size: 15px; box-shadow: 0 4px 15px rgba(255, 51, 133, 0.4); width: 100%; }
-
+    .btn-massa { background: #8bc34a; color: white; margin-top: 15px; padding: 12px; display: none; }
     .separator { text-align: center; margin: 25px 0; font-weight: 800; color: var(--text-main); font-size: 18px; }
     .separator::after { content: ""; display: block; width: 40px; height: 3px; background: var(--accent); margin: 8px auto; border-radius: 2px; }
-
     .order-card { background: var(--bg-card); border-radius: 20px; margin-bottom: 15px; box-shadow: 0 6px 15px var(--shadow); overflow: hidden; border: 1px solid var(--border-color); transition: transform 0.2s ease; position: relative; }
-    .order-card:hover { transform: translateY(-2px); }
-    
     .status-p-comprar { background: var(--card-p-comprar) !important; }
     .status-comprado { background: var(--card-comprado) !important; border-left: 8px solid #8bc34a; }
     .status-em-producao { background: var(--card-producao) !important; }
     .status-produzido { background: var(--card-produzido) !important; }
     .status-reagendado { background: var(--card-reagendado) !important; border-left: 8px solid #ffb74d; }
-
-    .order-card.finalizado { opacity: 0.6; filter: grayscale(0.5); }
-    
     .order-header-centered { background: #4a90e2; color: white; padding: 4px 25px; border-radius: 0 0 15px 15px; font-weight: 800; font-size: 11px; position: absolute; top: 0; left: 50%; transform: translateX(-50%); box-shadow: 0 2px 6px rgba(0,0,0,0.1); z-index: 2; }
-    
     .card-main-row { display: grid; grid-template-columns: 1fr 1fr 1fr 1.5fr 1.5fr 140px; gap: 15px; padding: 30px 20px 10px 20px; align-items: center; border-bottom: 1px solid var(--border-color); }
     .data-label { font-size: 8px; color: var(--text-sub); font-weight: 800; text-transform: uppercase; margin-bottom: 2px; }
     .data-value { font-size: 13px; font-weight: 700; color: var(--text-main); line-height: 1.1; }
     .status-box { border-left: 1px solid var(--border-color); padding-left: 10px; }
     .chk-item { display: flex; align-items: center; gap: 6px; font-size: 9px; font-weight: 600; margin-bottom: 4px; cursor: pointer; color: var(--text-main); }
     .chk-item input { width: 14px; height: 14px; cursor: pointer; accent-color: var(--accent); }
-
     .card-actions-right { display: flex; flex-direction: column; gap: 5px; border-left: 1px solid var(--border-color); padding-left: 15px; }
     .btn-card-right { padding: 6px; font-size: 10px; border-radius: 8px; width: 100%; font-weight: 800; }
-
     .items-table-area { padding: 10px 20px; background: rgba(0,0,0,0.01); display: grid; grid-template-columns: 2fr 1fr; gap: 20px; align-items: start; }
     .color-text { font-weight: 800; text-transform: uppercase; font-size: 11px; }
     .color-BRANCO { color: #888; text-shadow: 0 0 1px #000; }
@@ -95,33 +60,26 @@
     .color-LARANJA { color: #f39c12; }
     .color-AMARELO { color: #f1c40f; }
     .color-PINK { color: #ff69b4; }
-
+    .alert-pendente { background: #ff5252; color: white; font-size: 9px; padding: 3px 6px; border-radius: 6px; font-weight: 800; margin-top: 5px; display: inline-block; }
     #modalCadastro { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9999; backdrop-filter: blur(8px); }
     .modal-body { background: var(--bg-card); color: var(--text-main); width: 95%; max-width: 950px; margin: 10px auto; padding: 40px; border-radius: 30px; max-height: 96vh; overflow-y: auto; box-sizing: border-box; }
-    
     .edit-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-bottom: 25px; }
     .edit-group { background: var(--bg-body); padding: 20px; border-radius: 18px; border: 1px solid var(--border-color); }
     .edit-group label { display: block; font-weight: 800; font-size: 10px; color: var(--text-sub); margin-bottom: 10px; text-transform: uppercase; }
     .edit-group input, .edit-group select { width: 100%; padding: 12px; border: 2px solid var(--border-color); border-radius: 10px; background: var(--bg-card); color: var(--text-main); font-family: 'Poppins'; font-size: 13px; outline: none; box-sizing: border-box; }
-
     .status-especial-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: center; margin-top: 15px; }
-    
     .item-form-row { background: var(--bg-body); border: 2px solid var(--border-color); padding: 25px; border-radius: 20px; margin-bottom: 20px; position: relative; }
     .btn-delete-item { position: absolute; top: -12px; right: -12px; background: #ff5252; color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; font-weight: 900; box-shadow: 0 2px 8px rgba(255,82,82,0.4); display: flex; align-items: center; justify-content: center; }
-    
     .btn-delete-order { background: #ff5252; position: absolute; top: 12px; right: 12px; padding: 6px; border-radius: 8px; color: white; border: none; cursor: pointer; z-index: 5; font-size: 10px; }
   </style>
 </head>
 <body>
-
 <div class="container">
   <button class="btn-dark-toggle" onclick="toggleDarkMode()" id="darkModeBtn">🌙</button>
-
   <div class="tabs">
     <div class="tab active" id="tabAtivos" onclick="mudarAba('ATIVOS')">📦 PEDIDOS ATIVOS</div>
     <div class="tab" id="tabEnviados" onclick="mudarAba('ENVIADOS')">✅ HISTÓRICO ENVIADOS</div>
   </div>
-
   <div class="kpi-row">
     <div class="kpi-card" style="border-color: #ff3385;"><p>T. SEMANA</p><h3 id="k-ts">0</h3><p>T. DIA</p><h3 id="k-td">0</h3></div>
     <div class="kpi-card" style="border-color: #00acee;"><p>EM PROD.</p><h3 id="k-ep">0</h3><p>PRODUZIDO</p><h3 id="k-pr">0</h3></div>
@@ -129,54 +87,44 @@
     <div class="kpi-card" style="border-color: #8e94f2;"><p>ENVIADOS</p><h3 id="k-ev">0</h3><p>REAGEND.</p><h3 id="k-re">0</h3></div>
     <div class="kpi-card" style="border-color: #ff3385;"><p>P/ COMPRAR</p><h3 id="k-pc">0</h3></div>
   </div>
-
   <div class="filter-container">
     <div class="filter-grid">
       <div class="filter-group"><label>BUSCA RÁPIDA</label><input type="text" id="filtroBusca" placeholder="🔍 Nome, Ref ou ID"></div>
       <div class="filter-group"><label>STATUS</label>
-        <select id="filtroStatus">
+        <select id="filtroStatus" onchange="toggleBotaoMassa()">
           <option value="">Todos</option>
           <option value="COMPRADO">COMPRADO</option><option value="EM_PRODUCAO">EM PRODUÇÃO</option><option value="PRODUZIDO">PRODUZIDO</option><option value="P_COMPRAR">P/ COMPRAR</option>
         </select>
       </div>
-      <div class="filter-group"><label>FILTRAR POR SEMANA</label>
-        <select id="filtroSemana">
-          <option value="">Todas as Semanas</option>
-        </select>
-      </div>
+      <div class="filter-group"><label>FILTRAR POR SEMANA</label><select id="filtroSemana"><option value="">Todas as Semanas</option></select></div>
       <div style="display: flex; gap: 15px;">
         <button class="btn btn-filter" onclick="filtrar()">🔍 FILTRAR</button>
         <button class="btn btn-clear" onclick="limpar()">🧹 LIMPAR</button>
       </div>
     </div>
+    <button class="btn btn-massa" id="btnMassaComprado" onclick="marcarTodosComprados()">✅ MARCAR TODOS COMO COMPRADOS</button>
     <button class="btn btn-add" id="btnAddPedido" onclick="abrirModal()">🚀 CADASTRAR NOVA VENDA</button>
   </div>
-
   <div class="separator" id="tituloLista">PEDIDOS ATIVOS</div>
   <div id="listaPedidos"><div class="msg-vazio">Carregando...</div></div>
 </div>
-
 <div id="modalCadastro">
   <div class="modal-body">
     <h2 id="modalTitle" style="color:var(--accent); margin: 0 0 25px 0; font-size: 24px; font-weight: 800;">Novo Pedido</h2>
     <input type="hidden" id="editPedidoId">
-    
     <div class="edit-grid">
-      <div class="edit-group">
-        <label>Informações da Loja</label>
+      <div class="edit-group"><label>Informações da Loja</label>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
           <div><label style="font-size:8px">LOJA</label><select id="cLoja"><option value="FF">FF</option><option value="PART">PART</option></select></div>
           <div><label style="font-size:8px">LOCAL LOGO</label><select id="cLocal"><option value="FT">FT</option><option value="CT/FT">CT/FT</option><option value="2MG/CT/FT">2MG/CT/FT</option><option value="BOLSO">BOLSO</option></select></div>
         </div>
         <div style="margin-top:15px;"><label style="font-size:8px">NOME DA LOGO</label><input type="text" id="cLogo" placeholder="Logo"></div>
       </div>
-      <div class="edit-group">
-        <label>Dados do Cliente</label>
+      <div class="edit-group"><label>Dados do Cliente</label>
         <div style="margin-bottom:15px;"><label style="font-size:8px">NOME CLIENTE</label><input type="text" id="cNome" placeholder="Nome Completo"></div>
         <div><label style="font-size:8px">APELIDO / REFERÊNCIA</label><input type="text" id="cApelido" placeholder="Ref"></div>
       </div>
-      <div class="edit-group">
-        <label>Agendamento & Status Especial</label>
+      <div class="edit-group"><label>Agendamento & Status Especial</label>
         <div style="display:grid; grid-template-columns: 2fr 1fr; gap:15px; margin-bottom:15px;">
           <div><label style="font-size:8px">DATA ENTREGA</label><input type="date" id="cData" onchange="setSemana()"></div>
           <div><label style="font-size:8px">DIA</label><input type="text" id="cSemana" readonly style="text-align:center; font-weight:800; color:var(--accent); background:var(--bg-body);"></div>
@@ -190,7 +138,6 @@
         </div>
       </div>
     </div>
-    
     <div style="background: var(--bg-body); padding: 25px; border-radius: 30px; border: 2px solid var(--border-color);">
       <h4 style="margin: 0 0 20px 0; font-size: 16px; font-weight: 800;">📦 Itens do Pedido</h4>
       <div id="itensPedidoContainer"></div>
@@ -199,221 +146,90 @@
         <button onclick="duplicarLinhaForm()" style="flex:1; padding:12px; border:2px dashed var(--text-sub); border-radius:15px; cursor:pointer; background:var(--bg-card); color:var(--text-sub); font-weight:700;">📋 CLONAR ÚLTIMO</button>
       </div>
     </div>
-
     <div style="margin-top: 30px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
       <button class="btn btn-add" id="btnSalvar" onclick="salvar()" style="margin-top:0;">💾 SALVAR PEDIDO</button>
       <button class="btn btn-clear" onclick="fecharModal()">❌ CANCELAR</button>
     </div>
   </div>
 </div>
-
 <script>
   const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwliSQKxeLPD7uQGC9co0w6obLSidV-cC4VyKnDwrFLJC5e63GV6Ia8SQ6Om-SPwY4M/exec';
-  let dadosBrutos = [];
-  let abaAtual = 'ATIVOS';
-
-  function toggleDarkMode() {
-    document.body.classList.toggle('dark-mode');
-    document.getElementById('darkModeBtn').innerText = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
-  }
-
-  function mudarAba(aba) {
-    abaAtual = aba;
-    document.getElementById('tabAtivos').classList.toggle('active', aba === 'ATIVOS');
-    document.getElementById('tabEnviados').classList.toggle('active', aba === 'ENVIADOS');
-    document.getElementById('tituloLista').innerText = aba === 'ATIVOS' ? 'PEDIDOS ATIVOS' : 'HISTÓRICO ENVIADOS';
-    carregar();
-  }
-
+  let dadosBrutos = []; let abaAtual = 'ATIVOS'; let filtradosAtuais = [];
+  function toggleDarkMode() { document.body.classList.toggle('dark-mode'); document.getElementById('darkModeBtn').innerText = document.body.classList.contains('dark-mode') ? '☀️' : '🌙'; }
+  function mudarAba(aba) { abaAtual = aba; document.getElementById('tabAtivos').classList.toggle('active', aba === 'ATIVOS'); document.getElementById('tabEnviados').classList.toggle('active', aba === 'ENVIADOS'); carregar(); }
   function gerarFiltroSemanas() {
-    const select = document.getElementById('filtroSemana');
-    select.innerHTML = '<option value="">Todas as Semanas</option>';
-    const hoje = new Date();
-    const diaSemana = hoje.getDay();
-    const diffSeg = diaSemana === 0 ? -6 : 1 - diaSemana;
-    let segunda = new Date(hoje);
-    segunda.setDate(hoje.getDate() + diffSeg);
+    const select = document.getElementById('filtroSemana'); select.innerHTML = '<option value="">Todas as Semanas</option>';
+    const hoje = new Date(); const diaSemana = hoje.getDay(); const diffSeg = diaSemana === 0 ? -6 : 1 - diaSemana;
+    let segunda = new Date(hoje); segunda.setDate(hoje.getDate() + diffSeg);
     for (let i = 0; i < 6; i++) {
-      const dia = segunda.getDate().toString().padStart(2, '0');
-      const mes = (segunda.getMonth() + 1).toString().padStart(2, '0');
-      const label = `Semana ${dia}/${mes}`;
-      const valor = `${segunda.getFullYear()}-${(segunda.getMonth()+1).toString().padStart(2,'0')}-${segunda.getDate().toString().padStart(2,'0')}`;
-      select.innerHTML += `<option value="${valor}">${label}</option>`;
+      const dia = segunda.getDate().toString().padStart(2, '0'); const mes = (segunda.getMonth() + 1).toString().padStart(2, '0');
+      select.innerHTML += `<option value="${segunda.getFullYear()}-${mes}-${dia}">Semana ${dia}/${mes}</option>`;
       segunda.setDate(segunda.getDate() + 7);
     }
   }
-
-  function carregar() {
-    document.getElementById('listaPedidos').innerHTML = '<div class="msg-vazio">Sincronizando...</div>';
-    const script = document.createElement('script');
-    script.src = WEB_APP_URL + '?action=getDados&tipo=' + abaAtual + '&callback=handleResponse';
-    document.body.appendChild(script);
-  }
-
-  window.handleResponse = function(res) {
-    if (res && res.pedidos) { dadosBrutos = res.pedidos; renderizar(res.pedidos, res.kpis); }
-    else { document.getElementById('listaPedidos').innerHTML = '<div class="msg-vazio">Nenhum pedido encontrado.</div>'; }
-  };
-
+  function carregar() { document.getElementById('listaPedidos').innerHTML = '<div class="msg-vazio">Sincronizando...</div>'; const script = document.createElement('script'); script.src = WEB_APP_URL + '?action=getDados&tipo=' + abaAtual + '&callback=handleResponse'; document.body.appendChild(script); }
+  window.handleResponse = function(res) { if (res && res.pedidos) { dadosBrutos = res.pedidos; renderizar(res.pedidos, res.kpis); } else { document.getElementById('listaPedidos').innerHTML = '<div class="msg-vazio">Nenhum pedido encontrado.</div>'; } };
   function renderizar(pedidos, kpis) {
-    if (kpis) {
-      const ids = ['k-ts','k-td','k-ep','k-pr','k-el','k-ei','k-ev','k-re','k-pc'];
-      const vals = [kpis.totalSemana, kpis.totalDia, kpis.emProducao, kpis.produzido, kpis.etiqLiberada, kpis.etiqImpressa, kpis.enviados, kpis.reagendado, kpis.paraComprar];
-      ids.forEach((id, i) => document.getElementById(id).innerText = vals[i]);
-    }
-    const container = document.getElementById('listaPedidos');
-    container.innerHTML = '';
-    
-    // AGRUPAMENTO PELO ID REAL DA PLANILHA
-    const grupos = pedidos.reduce((acc, p) => { 
-      const id = String(p.ID).trim(); 
-      if (!acc[id]) acc[id] = []; 
-      acc[id].push(p); 
-      return acc; 
-    }, {});
-
+    filtradosAtuais = pedidos; toggleBotaoMassa();
+    if (kpis) { const ids = ['k-ts','k-td','k-ep','k-pr','k-el','k-ei','k-ev','k-re','k-pc']; const vals = [kpis.totalSemana, kpis.totalDia, kpis.emProducao, kpis.produzido, kpis.etiqLiberada, kpis.etiqImpressa, kpis.enviados, kpis.reagendado, kpis.paraComprar]; ids.forEach((id, i) => document.getElementById(id).innerText = vals[i]); }
+    const container = document.getElementById('listaPedidos'); container.innerHTML = '';
+    const grupos = pedidos.reduce((acc, p) => { const id = String(p.ID).trim(); if (!acc[id]) acc[id] = []; acc[id].push(p); return acc; }, {});
     for (const id in grupos) {
-      const itens = grupos[id]; const p = itens[0];
-      let statusClass = abaAtual === 'ENVIADOS' ? 'finalizado' : '';
-      if (abaAtual === 'ATIVOS') {
-        if (p.P_COMPRAR == 'TRUE') statusClass = 'status-p-comprar';
-        if (p.REAGENDADO == 'TRUE') statusClass = 'status-reagendado';
-        if (p.EM_PRODUCAO == 'TRUE') statusClass = 'status-em-producao';
-        if (p.PRODUZIDO == 'TRUE') statusClass = 'status-produzido';
-        if (p.COMPRADO == 'TRUE') statusClass = 'status-comprado';
-      }
-
-      container.innerHTML += `
-        <div class="order-card ${statusClass}">
-          <button class="btn-delete-order" onclick="excluirPedido('${id}')">🗑️</button>
-          <div class="order-header-centered">PEDIDO #${id}</div>
-          <div class="card-main-row">
-            <div><div class="data-label">ORIGEM / LOGO</div><div class="data-value">${p.LOJA} • ${p.LOCAL}</div><div class="data-value" style="font-size:10px; color:var(--text-sub);">${p.LOGO}</div></div>
-            <div><div class="data-label">CLIENTE</div><div class="data-value ${p.COMPRADO == 'TRUE' ? 'nome-comprado' : ''}">${p.NOME}</div><div class="data-label" style="margin-top:2px;">REF: ${p.APELIDO}</div></div>
-            <div><div class="data-label">ENTREGA</div><div class="data-value" style="color:var(--accent)">${p.DATA} (${p.SEMANA})${p.REAGENDADO == 'TRUE' ? `<br><span style="font-size:8px; background:orange; color:white; padding:2px 5px; border-radius:5px; margin-top:4px; display:inline-block; font-weight:800;">🗓️ ${p.DATA_REAGENDADO}</span>` : ''}</div></div>
-            <div class="status-box">${chk(p.rowIndex, 'COMPRADO', p.COMPRADO)}${chk(p.rowIndex, 'MATRIZ', p.MATRIZ)}${chk(p.rowIndex, 'AMOSTRA', p.AMOSTRA)}${chk(p.rowIndex, 'APROVADO', p.APROVADO)}</div>
-            <div class="status-box">${chk(p.rowIndex, 'EM_PRODUCAO', p.EM_PRODUCAO)}${chk(p.rowIndex, 'PRODUZIDO', p.PRODUZIDO)}${chk(p.rowIndex, 'ETIQ_LIBERADA', p.ETIQ_LIBERADA)}${chk(p.rowIndex, 'ENVIADO', p.ENVIADO)}</div>
-            <div class="card-actions-right">
-              <div class="chk-item" style="margin-bottom:3px;"><span style="color:var(--accent); font-weight:800; font-size:8px;">P/ COMPRAR</span><input type="checkbox" ${p.P_COMPRAR == 'TRUE' ? 'checked' : ''} onchange="atualizar(${p.rowIndex}, 'P_COMPRAR', this.checked)"></div>
-              <div class="chk-item" style="margin-bottom:3px;"><span style="color:orange; font-weight:800; font-size:8px;">REAGENDADO</span><input type="checkbox" ${p.REAGENDADO == 'TRUE' ? 'checked' : ''} onchange="promptReagendar(${p.rowIndex}, this.checked)"></div>
-              <div style="display:flex; gap:4px;">
-                <button class="btn btn-card-right" style="background:#4a90e2; color:white;" onclick="abrirEdicao('${id}')">✏️ EDITAR</button>
-                <button class="btn btn-card-right" style="background:var(--accent); color:white;" onclick="duplicarPedido('${id}')">📋 CLONAR</button>
-              </div>
-            </div>
-          </div>
-          <div class="items-table-area">
-            <table style="width:100%; border-collapse: collapse;">
-              <thead><tr style="font-size:8px; color:var(--text-sub); text-align:left; border-bottom: 1px solid var(--border-color);"><th style="padding-bottom:4px;">QTD</th><th style="padding-bottom:4px;">PRODUTO</th><th style="padding-bottom:4px;">COR</th><th style="padding-bottom:4px;">TAM</th></tr></thead>
-              <tbody>${itens.map(i => `<tr style="border-bottom: 1px solid var(--border-color);"><td style="font-size:11px; font-weight:800; padding:6px 0; color:var(--text-main);">${i.QTD}</td><td style="font-size:11px; font-weight:700; color:var(--text-main);">${i.PRODUTO}</td><td style="font-size:11px; font-weight:800;"><span class="color-text color-${getColorKey(i.COR)}">${i.COR}</span></td><td style="font-size:11px; font-weight:800; color:var(--text-main);">${i.TAMANHO}</td></tr>`).join('')}</tbody>
-            </table>
-            <div style="position:relative; background:var(--bg-body); border-radius:10px; padding:10px; font-size:10px; color:var(--text-sub); border:1px solid var(--border-color);">
-              <div style="position:absolute; top:-6px; left:8px; background:var(--bg-card); font-size:7px; padding:0 4px; font-weight:800; color:var(--accent);">OBS</div>
-              ${p.OBS || 'Sem anotações.'}
-            </div>
-          </div>
-        </div>`;
+      const itens = grupos[id]; const p = itens[0]; let statusClass = abaAtual === 'ENVIADOS' ? 'finalizado' : '';
+      if (abaAtual === 'ATIVOS') { if (p.P_COMPRAR == 'TRUE') statusClass = 'status-p-comprar'; if (p.REAGENDADO == 'TRUE') statusClass = 'status-reagendado'; if (p.EM_PRODUCAO == 'TRUE') statusClass = 'status-em-producao'; if (p.PRODUZIDO == 'TRUE') statusClass = 'status-produzido'; if (p.COMPRADO == 'TRUE') statusClass = 'status-comprado'; }
+      let pendente = !p.DATA || itens.some(i => !i.PRODUTO || !i.COR);
+      container.innerHTML += `<div class="order-card ${statusClass}"><button class="btn-delete-order" onclick="excluirPedido('${id}')">🗑️</button><div class="order-header-centered">PEDIDO #${id}</div><div class="card-main-row"><div><div class="data-label">ORIGEM / LOGO</div><div class="data-value">${p.LOJA} • ${p.LOCAL}</div><div class="data-value" style="font-size:10px; color:var(--text-sub);">${p.LOGO}</div>${pendente ? '<div class="alert-pendente">⚠️ DADOS PENDENTES</div>' : ''}</div><div><div class="data-label">CLIENTE</div><div class="data-value ${p.COMPRADO == 'TRUE' ? 'nome-comprado' : ''}">${p.NOME}</div><div class="data-label" style="margin-top:2px;">REF: ${p.APELIDO}</div></div><div><div class="data-label">ENTREGA</div><div class="data-value" style="color:var(--accent)">${p.DATA || '---'} (${p.SEMANA || '---'})${p.REAGENDADO == 'TRUE' ? `<br><span style="font-size:8px; background:orange; color:white; padding:2px 5px; border-radius:5px; margin-top:4px; display:inline-block; font-weight:800;">🗓️ ${p.DATA_REAGENDADO}</span>` : ''}</div></div><div class="status-box">${chk(p.rowIndex, 'COMPRADO', p.COMPRADO)}${chk(p.rowIndex, 'MATRIZ', p.MATRIZ)}${chk(p.rowIndex, 'AMOSTRA', p.AMOSTRA)}${chk(p.rowIndex, 'APROVADO', p.APROVADO)}</div><div class="status-box">${chk(p.rowIndex, 'EM_PRODUCAO', p.EM_PRODUCAO)}${chk(p.rowIndex, 'PRODUZIDO', p.PRODUZIDO)}${chk(p.rowIndex, 'ETIQ_LIBERADA', p.ETIQ_LIBERADA)}${chk(p.rowIndex, 'ENVIADO', p.ENVIADO)}</div><div class="card-actions-right"><div class="chk-item" style="margin-bottom:3px;"><span style="color:var(--accent); font-weight:800; font-size:8px;">P/ COMPRAR</span><input type="checkbox" ${p.P_COMPRAR == 'TRUE' ? 'checked' : ''} onchange="atualizar(${p.rowIndex}, 'P_COMPRAR', this.checked)"></div><div class="chk-item" style="margin-bottom:3px;"><span style="color:orange; font-weight:800; font-size:8px;">REAGENDADO</span><input type="checkbox" ${p.REAGENDADO == 'TRUE' ? 'checked' : ''} onchange="promptReagendar(${p.rowIndex}, this.checked)"></div><div style="display:flex; gap:4px;"><button class="btn btn-card-right" style="background:#4a90e2; color:white;" onclick="abrirEdicao('${id}')">✏️ EDITAR</button><button class="btn btn-card-right" style="background:var(--accent); color:white;" onclick="duplicarPedido('${id}')">📋 CLONAR</button></div></div></div><div class="items-table-area"><table style="width:100%; border-collapse: collapse;"><thead><tr style="font-size:8px; color:var(--text-sub); text-align:left; border-bottom: 1px solid var(--border-color);"><th style="padding-bottom:4px;">QTD</th><th style="padding-bottom:4px;">PRODUTO</th><th style="padding-bottom:4px;">COR</th><th style="padding-bottom:4px;">TAM</th></tr></thead><tbody>${itens.map(i => `<tr style="border-bottom: 1px solid var(--border-color);"><td style="font-size:11px; font-weight:800; padding:6px 0; color:var(--text-main);">${i.QTD}</td><td style="font-size:11px; font-weight:700; color:var(--text-main);">${i.PRODUTO || '---'}</td><td style="font-size:11px; font-weight:800;"><span class="color-text color-${getColorKey(i.COR)}">${i.COR || '---'}</span></td><td style="font-size:11px; font-weight:800; color:var(--text-main);">${i.TAMANHO}</td></tr>`).join('')}</tbody></table><div style="position:relative; background:var(--bg-body); border-radius:10px; padding:10px; font-size:10px; color:var(--text-sub); border:1px solid var(--border-color);"><div style="position:absolute; top:-6px; left:8px; background:var(--bg-card); font-size:7px; padding:0 4px; font-weight:800; color:var(--accent);">OBS</div>${p.OBS || 'Sem anotações.'}</div></div></div>`;
     }
   }
-
-  function getColorKey(cor) {
-    if (!cor) return ''; const c = cor.toUpperCase();
-    if (c.includes('BRANCO')) return 'BRANCO'; if (c.includes('PRETO')) return 'PRETO'; if (c.includes('AZUL')) return 'AZUL'; if (c.includes('VERDE')) return 'VERDE'; if (c.includes('VERMELHO')) return 'VERMELHO'; if (c.includes('VINHO')) return 'VINHO'; if (c.includes('LARANJA')) return 'LARANJA'; if (c.includes('AMARELO')) return 'AMARELO'; if (c.includes('PINK')) return 'PINK';
-    return '';
-  }
-
+  function getColorKey(cor) { if (!cor) return ''; const c = cor.toUpperCase(); if (c.includes('BRANCO')) return 'BRANCO'; if (c.includes('PRETO')) return 'PRETO'; if (c.includes('AZUL')) return 'AZUL'; if (c.includes('VERDE')) return 'VERDE'; if (c.includes('VERMELHO')) return 'VERMELHO'; if (c.includes('VINHO')) return 'VINHO'; if (c.includes('LARANJA')) return 'LARANJA'; if (c.includes('AMARELO')) return 'AMARELO'; if (c.includes('PINK')) return 'PINK'; return ''; }
   function chk(row, campo, val) { return `<label class="chk-item"><input type="checkbox" ${val == 'TRUE' ? 'checked' : ''} onchange="atualizar(${row}, '${campo}', this.checked)"> ${campo.replace('_', ' ')}</label>`; }
-
-  function promptReagendar(row, checked) {
-    if (checked) { const data = prompt("Nova Data (DD/MM/YYYY):"); if (data) atualizar(row, 'DATA_REAGENDADO', data); else carregar(); }
-    else { atualizar(row, 'REAGENDADO', false); }
-  }
-
+  function promptReagendar(row, checked) { if (checked) { const data = prompt("Nova Data (DD/MM/YYYY):"); if (data) atualizar(row, 'DATA_REAGENDADO', data); else carregar(); } else { atualizar(row, 'REAGENDADO', false); } }
   function toggleReagendado() { const check = document.getElementById('cReagendado').checked; document.getElementById('cDataReagendado').style.display = check ? 'block' : 'none'; }
-
+  function toggleBotaoMassa() { const status = document.getElementById('filtroStatus').value; document.getElementById('btnMassaComprado').style.display = (status === 'P_COMPRAR' && filtradosAtuais.length > 0) ? 'block' : 'none'; }
   function filtrar() {
-    const busca = document.getElementById('filtroBusca').value.toLowerCase().trim();
-    const status = document.getElementById('filtroStatus').value;
-    const semanaVal = document.getElementById('filtroSemana').value;
-    let seg, dom;
-    if (semanaVal) { seg = new Date(semanaVal + 'T00:00:00'); dom = new Date(seg); dom.setDate(seg.getDate() + 6); dom.setHours(23,59,59,999); }
+    const busca = document.getElementById('filtroBusca').value.toLowerCase().trim(); const status = document.getElementById('filtroStatus').value; const semanaVal = document.getElementById('filtroSemana').value;
+    let seg, dom; if (semanaVal) { seg = new Date(semanaVal + 'T00:00:00'); dom = new Date(seg); dom.setDate(seg.getDate() + 6); dom.setHours(23,59,59,999); }
     const filtrados = dadosBrutos.filter(p => {
-      const matchBusca = !busca || (p.NOME && p.NOME.toLowerCase().includes(busca)) || (p.ID && String(p.ID).toLowerCase().includes(busca));
+      const matchBusca = !busca || (p.NOME && p.NOME.toLowerCase().includes(busca)) || (p.ID && String(p.ID).toLowerCase().includes(busca)) || (p.APELIDO && p.APELIDO.toLowerCase().includes(busca));
       const matchStatus = !status || p[status] == 'TRUE';
-      let matchSemana = true;
-      if (semanaVal) { if (!p.DATA) return false; const dParts = p.DATA.split('/'); const pData = new Date(dParts[2], dParts[1]-1, dParts[0]); matchSemana = pData >= seg && pData <= dom; }
+      let matchSemana = true; if (semanaVal) { if (!p.DATA) return false; const dParts = p.DATA.split('/'); const pData = new Date(dParts[2], dParts[1]-1, dParts[0]); matchSemana = pData >= seg && pData <= dom; }
       return matchBusca && matchStatus && matchSemana;
     });
     renderizar(filtrados, null);
   }
-
   function limpar() { document.getElementById('filtroBusca').value = ''; document.getElementById('filtroStatus').value = ''; document.getElementById('filtroSemana').value = ''; carregar(); }
-
   function abrirModal() {
-    document.getElementById('modalTitle').innerText = 'Novo Pedido';
-    document.getElementById('editPedidoId').value = '';
-    document.getElementById('cNome').value = ''; document.getElementById('cLogo').value = ''; document.getElementById('cApelido').value = '';
-    document.getElementById('cData').value = ''; document.getElementById('cSemana').value = '';
-    document.getElementById('cPComprar').checked = false; document.getElementById('cReagendado').checked = false;
-    document.getElementById('cDataReagendado').style.display = 'none';
-    document.getElementById('itensPedidoContainer').innerHTML = '';
-    addLinhaForm();
-    document.getElementById('modalCadastro').style.display = 'block';
+    document.getElementById('modalTitle').innerText = 'Novo Pedido'; document.getElementById('editPedidoId').value = ''; document.getElementById('cNome').value = ''; document.getElementById('cLogo').value = ''; document.getElementById('cApelido').value = ''; document.getElementById('cData').value = ''; document.getElementById('cSemana').value = ''; document.getElementById('cPComprar').checked = false; document.getElementById('cReagendado').checked = false; document.getElementById('cDataReagendado').style.display = 'none'; document.getElementById('itensPedidoContainer').innerHTML = ''; addLinhaForm(); document.getElementById('modalCadastro').style.display = 'block';
   }
-
   function fecharModal() { document.getElementById('modalCadastro').style.display = 'none'; }
-
   function addLinhaForm(qtd='', prod='', cor='', tam='', obs='') {
-    const container = document.getElementById('itensPedidoContainer');
-    const row = document.createElement('div'); row.className = 'item-form-row';
-    row.innerHTML = `
-      <button class="btn-delete-item" onclick="this.parentElement.remove()">×</button>
-      <div style="display: grid; grid-template-columns: 70px 1.5fr 1fr 80px; gap: 15px; align-items: center;">
-        <input type="number" class="iQtd" placeholder="Qtd" min="1" value="${qtd}" style="padding:10px; border:2px solid var(--border-color); border-radius:10px; background:var(--bg-card); color:var(--text-main); font-weight:800;">
-        <select class="iProd" style="padding:10px; border:2px solid var(--border-color); border-radius:10px; background:var(--bg-card); color:var(--text-main); font-weight:700;"><option value="">Produto</option><option ${prod=='POLO BÁSICA'?'selected':''}>POLO BÁSICA</option><option ${prod=='BABYLOOK POLO'?'selected':''}>BABYLOOK POLO</option><option ${prod=='CAMISETA BÁSICA'?'selected':''}>CAMISETA BÁSICA</option><option ${prod=='CAMISETA POLIÉSTER'?'selected':''}>CAMISETA POLIÉSTER</option><option ${prod=='CAMISETA BABYLOOK FEMININA'?'selected':''}>CAMISETA BABYLOOK FEMININA</option></select>
-        <select class="iCor" style="padding:10px; border:2px solid var(--border-color); border-radius:10px; background:var(--bg-card); color:var(--text-main); font-weight:700;"><option value="">Cor</option><option ${cor=='BRANCO'?'selected':''}>BRANCO</option><option ${cor=='PRETO'?'selected':''}>PRETO</option><option ${cor=='CINZA MESCLA'?'selected':''}>CINZA MESCLA</option><option ${cor=='CINZA ESCURO'?'selected':''}>CINZA ESCURO</option><option ${cor=='AZUL TURQUESA'?'selected':''}>AZUL TURQUESA</option><option ${cor=='AZUL ROYAL'?'selected':''}>AZUL ROYAL</option><option ${cor=='AZUL MARINHO'?'selected':''}>AZUL MARINHO</option><option ${cor=='VERDE BANDEIRA'?'selected':''}>VERDE BANDEIRA</option><option ${cor=='VERDE LIMÃO'?'selected':''}>VERDE LIMÃO</option><option ${cor=='VERDE MUSGO'?'selected':''}>VERDE MUSGO</option><option ${cor=='VERMELHO'?'selected':''}>VERMELHO</option><option ${cor=='VINHO'?'selected':''}>VINHO</option><option ${cor=='LARANJA'?'selected':''}>LARANJA</option><option ${cor=='AMARELO'?'selected':''}>AMARELO</option><option ${cor=='PINK'?'selected':''}>PINK</option></select>
-        <select class="iTam" style="padding:10px; border:2px solid var(--border-color); border-radius:10px; background:var(--bg-card); color:var(--text-main); font-weight:700;"><option ${tam=='U'?'selected':''}>U</option><option ${tam=='P'?'selected':''}>P</option><option ${tam=='M'?'selected':''}>M</option><option ${tam=='G'?'selected':''}>G</option><option ${tam=='GG'?'selected':''}>GG</option><option ${tam=='EG'?'selected':''}>EG</option></select>
-      </div>
-      <input type="text" class="iObs" placeholder="Observação do item..." value="${obs}" style="width:100%; padding:10px; border:2px solid var(--border-color); border-radius:10px; font-size:11px; margin-top:12px; background:var(--bg-card); color:var(--text-main);">`;
+    const container = document.getElementById('itensPedidoContainer'); const row = document.createElement('div'); row.className = 'item-form-row';
+    row.innerHTML = `<button class="btn-delete-item" onclick="this.parentElement.remove()">×</button><div style="display: grid; grid-template-columns: 70px 1.5fr 1fr 80px; gap: 15px; align-items: center;"><input type="number" class="iQtd" placeholder="Qtd" min="1" value="${qtd}" style="padding:10px; border:2px solid var(--border-color); border-radius:10px; background:var(--bg-card); color:var(--text-main); font-weight:800;"><select class="iProd" style="padding:10px; border:2px solid var(--border-color); border-radius:10px; background:var(--bg-card); color:var(--text-main); font-weight:700;"><option value="">Produto</option><option ${prod=='POLO BÁSICA'?'selected':''}>POLO BÁSICA</option><option ${prod=='BABYLOOK POLO'?'selected':''}>BABYLOOK POLO</option><option ${prod=='CAMISETA BÁSICA'?'selected':''}>CAMISETA BÁSICA</option><option ${prod=='CAMISETA POLIÉSTER'?'selected':''}>CAMISETA POLIÉSTER</option><option ${prod=='CAMISETA BABYLOOK FEMININA'?'selected':''}>CAMISETA BABYLOOK FEMININA</option></select><select class="iCor" style="padding:10px; border:2px solid var(--border-color); border-radius:10px; background:var(--bg-card); color:var(--text-main); font-weight:700;"><option value="">Cor</option><option ${cor=='BRANCO'?'selected':''}>BRANCO</option><option ${cor=='PRETO'?'selected':''}>PRETO</option><option ${cor=='CINZA MESCLA'?'selected':''}>CINZA MESCLA</option><option ${cor=='CINZA ESCURO'?'selected':''}>CINZA ESCURO</option><option ${cor=='AZUL TURQUESA'?'selected':''}>AZUL TURQUESA</option><option ${cor=='AZUL ROYAL'?'selected':''}>AZUL ROYAL</option><option ${cor=='AZUL MARINHO'?'selected':''}>AZUL MARINHO</option><option ${cor=='VERDE BANDEIRA'?'selected':''}>VERDE BANDEIRA</option><option ${cor=='VERDE LIMÃO'?'selected':''}>VERDE LIMÃO</option><option ${cor=='VERDE MUSGO'?'selected':''}>VERDE MUSGO</option><option ${cor=='VERMELHO'?'selected':''}>VERMELHO</option><option ${cor=='VINHO'?'selected':''}>VINHO</option><option ${cor=='LARANJA'?'selected':''}>LARANJA</option><option ${cor=='AMARELO'?'selected':''}>AMARELO</option><option ${cor=='PINK'?'selected':''}>PINK</option></select><select class="iTam" style="padding:10px; border:2px solid var(--border-color); border-radius:10px; background:var(--bg-card); color:var(--text-main); font-weight:700;"><option ${tam=='U'?'selected':''}>U</option><option ${tam=='P'?'selected':''}>P</option><option ${tam=='M'?'selected':''}>M</option><option ${tam=='G'?'selected':''}>G</option><option ${tam=='GG'?'selected':''}>GG</option><option ${tam=='EG'?'selected':''}>EG</option></select></div><input type="text" class="iObs" placeholder="Observação do item..." value="${obs}" style="width:100%; padding:10px; border:2px solid var(--border-color); border-radius:10px; font-size:11px; margin-top:12px; background:var(--bg-card); color:var(--text-main);">`;
     container.appendChild(row);
   }
-
   function duplicarLinhaForm() { const rows = document.querySelectorAll('.item-form-row'); if (rows.length === 0) return addLinhaForm(); const last = rows[rows.length - 1]; addLinhaForm(last.querySelector('.iQtd').value, last.querySelector('.iProd').value, last.querySelector('.iCor').value, last.querySelector('.iTam').value, last.querySelector('.iObs').value); }
-
   function setSemana() { const val = document.getElementById('cData').value; if (!val) return; const d = new Date(val + 'T12:00:00'); const dias = ["DOMINGO","SEGUNDA","TERÇA","QUARTA","QUINTA","SEXTA","SÁBADO"]; document.getElementById('cSemana').value = dias[d.getDay()]; }
-
   function abrirEdicao(pedidoId) {
     const itens = dadosBrutos.filter(p => String(p.ID) === String(pedidoId)); const p = itens[0];
-    document.getElementById('modalTitle').innerText = 'Editando Pedido #' + pedidoId;
-    document.getElementById('editPedidoId').value = pedidoId;
-    document.getElementById('cLoja').value = p.LOJA; document.getElementById('cLocal').value = p.LOCAL; document.getElementById('cLogo').value = p.LOGO;
-    document.getElementById('cNome').value = p.NOME; document.getElementById('cApelido').value = p.APELIDO;
+    document.getElementById('modalTitle').innerText = 'Editando Pedido #' + pedidoId; document.getElementById('editPedidoId').value = pedidoId; document.getElementById('cLoja').value = p.LOJA; document.getElementById('cLocal').value = p.LOCAL; document.getElementById('cLogo').value = p.LOGO; document.getElementById('cNome').value = p.NOME; document.getElementById('cApelido').value = p.APELIDO;
     if (p.DATA) { const d = p.DATA.split('/'); document.getElementById('cData').value = `${d[2]}-${d[1]}-${d[0]}`; }
-    document.getElementById('cSemana').value = p.SEMANA;
-    document.getElementById('cPComprar').checked = p.P_COMPRAR == 'TRUE'; document.getElementById('cReagendado').checked = p.REAGENDADO == 'TRUE';
-    document.getElementById('cDataReagendado').value = p.DATA_REAGENDADO || ''; toggleReagendado();
-    const container = document.getElementById('itensPedidoContainer'); container.innerHTML = '';
-    itens.forEach(i => addLinhaForm(i.QTD, i.PRODUTO, i.COR, i.TAMANHO, i.OBS));
-    document.getElementById('modalCadastro').style.display = 'block';
+    document.getElementById('cSemana').value = p.SEMANA; document.getElementById('cPComprar').checked = p.P_COMPRAR == 'TRUE'; document.getElementById('cReagendado').checked = p.REAGENDADO == 'TRUE'; document.getElementById('cDataReagendado').value = p.DATA_REAGENDADO || ''; toggleReagendado();
+    const container = document.getElementById('itensPedidoContainer'); container.innerHTML = ''; itens.forEach(i => addLinhaForm(i.QTD, i.PRODUTO, i.COR, i.TAMANHO, i.OBS)); document.getElementById('modalCadastro').style.display = 'block';
   }
-
   async function salvar() {
     const btn = document.getElementById('btnSalvar'); const editId = document.getElementById('editPedidoId').value;
-    const nome = document.getElementById('cNome').value.trim(); const data = document.getElementById('cData').value;
-    if (!nome || !data) { alert('Preencha Nome e Data.'); return; }
-    const itens = Array.from(document.querySelectorAll('.item-form-row')).map(row => ({ quantidade: row.querySelector('.iQtd').value, produto: row.querySelector('.iProd').value, cor: row.querySelector('.iCor').value, tamanho: row.querySelector('.iTam').value, obs: row.querySelector('.iObs').value })).filter(i => i.produto && i.quantidade);
-    if (itens.length === 0) { alert('Adicione produtos.'); return; }
-    const d = data.split('-');
-    const cab = { loja: document.getElementById('cLoja').value, local: document.getElementById('cLocal').value, logo: document.getElementById('cLogo').value, nome: nome, apelido: document.getElementById('cApelido').value, data: `${d[2]}/${d[1]}/${d[0]}`, semana: document.getElementById('cSemana').value, hora: new Date().toLocaleTimeString('pt-BR').substring(0, 5), pComprar: document.getElementById('cPComprar').checked, reagendado: document.getElementById('cReagendado').checked, dataReagendado: document.getElementById('cDataReagendado').value };
-    btn.disabled = true; btn.innerText = '⏳ SALVANDO...';
-    await fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: editId ? 'editarPedido' : 'salvarPedido', pedidoId: editId, cabecalho: cab, itens: itens }) });
+    const nome = document.getElementById('cNome').value.trim(); const apelido = document.getElementById('cApelido').value.trim();
+    if (!nome || !apelido) { alert('Preencha Nome e Apelido para cadastrar.'); return; }
+    const itens = Array.from(document.querySelectorAll('.item-form-row')).map(row => ({ quantidade: row.querySelector('.iQtd').value, produto: row.querySelector('.iProd').value, cor: row.querySelector('.iCor').value, tamanho: row.querySelector('.iTam').value, obs: row.querySelector('.iObs').value }));
+    const dataVal = document.getElementById('cData').value; let dataStr = ''; if(dataVal){ const d = dataVal.split('-'); dataStr = `${d[2]}/${d[1]}/${d[0]}`; }
+    const cab = { loja: document.getElementById('cLoja').value, local: document.getElementById('cLocal').value, logo: document.getElementById('cLogo').value, nome: nome, apelido: apelido, data: dataStr, semana: document.getElementById('cSemana').value, hora: new Date().toLocaleTimeString('pt-BR').substring(0, 5), pComprar: document.getElementById('cPComprar').checked, reagendado: document.getElementById('cReagendado').checked, dataReagendado: document.getElementById('cDataReagendado').value };
+    btn.disabled = true; btn.innerText = '⏳ SALVANDO...'; await fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: editId ? 'editarPedido' : 'salvarPedido', pedidoId: editId, cabecalho: cab, itens: itens }) });
     fecharModal(); btn.disabled = false; btn.innerText = '💾 SALVAR PEDIDO'; setTimeout(carregar, 1500);
   }
-
   function atualizar(row, campo, val) { fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'atualizarStatus', rowIndex: row, campo: campo, valor: val }) }).then(() => setTimeout(carregar, 1000)); }
-  function duplicarPedido(pedidoId) { if (!confirm('Deseja CLONAR esta venda para um NOVO PEDIDO independente?')) return; fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'duplicarPedido', pedidoId: pedidoId }) }).then(() => setTimeout(carregar, 1000)); }
-  function excluirPedido(pedidoId) { if (!confirm('EXCLUIR PERMANENTEMENTE?')) return; fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'excluirPedido', pedidoId: pedidoId }) }).then(() => setTimeout(carregar, 1000)); }
-  
+  function marcarTodosComprados() { if(!confirm('Marcar todos os pedidos visíveis como COMPRADOS?')) return; const indices = filtradosAtuais.map(p => p.rowIndex); fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'atualizarMassaComprado', rowIndices: indices }) }).then(() => { alert('Status atualizados!'); setTimeout(carregar, 1000); }); }
+  function duplicarPedido(id) { if (!confirm('CLONAR para NOVO PEDIDO independente?')) return; fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'duplicarPedido', pedidoId: id }) }).then(() => setTimeout(carregar, 1000)); }
+  function excluirPedido(id) { if (!confirm('EXCLUIR PERMANENTEMENTE?')) return; fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'excluirPedido', pedidoId: id }) }).then(() => setTimeout(carregar, 1000)); }
   window.onload = () => { gerarFiltroSemanas(); carregar(); };
 </script>
 </body>
