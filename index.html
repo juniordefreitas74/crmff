@@ -42,25 +42,25 @@
     .tab { padding: 12px 25px; cursor: pointer; font-weight: 700; font-size: 14px; color: var(--text-sub); border-radius: 12px; transition: all 0.3s; }
     .tab.active { background: var(--accent); color: white; box-shadow: 0 4px 15px rgba(255, 51, 133, 0.4); }
 
-    .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 20px; }
+    .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 20px; }
     .kpi-card { background: var(--bg-card); padding: 12px; border-radius: 18px; text-align: center; box-shadow: 0 4px 10px var(--shadow); border-bottom: 4px solid; }
     .kpi-card p { margin: 0; font-size: 8px; font-weight: 700; color: var(--text-sub); text-transform: uppercase; letter-spacing: 1px; }
     .kpi-card h3 { margin: 2px 0; font-size: 18px; color: var(--text-main); }
 
-    .filter-container { background: var(--bg-card); padding: 15px; border-radius: 20px; box-shadow: 0 6px 20px var(--shadow); margin-bottom: 20px; border: 1px solid var(--border-color); }
-    .filter-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; align-items: end; }
-    .filter-group label { display: block; font-weight: 800; font-size: 9px; margin-bottom: 5px; color: var(--text-sub); text-transform: uppercase; }
-    .filter-group input, .filter-group select { width: 100%; padding: 8px; border: 2px solid var(--border-color); border-radius: 10px; background: var(--bg-body); color: var(--text-main); font-family: 'Poppins'; font-size: 11px; outline: none; }
+    /* FILTROS COM ESPAÇAMENTO CORRIGIDO */
+    .filter-container { background: var(--bg-card); padding: 25px; border-radius: 20px; box-shadow: 0 6px 20px var(--shadow); margin-bottom: 25px; border: 1px solid var(--border-color); }
+    .filter-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; align-items: end; }
+    .filter-group label { display: block; font-weight: 800; font-size: 10px; margin-bottom: 8px; color: var(--text-sub); text-transform: uppercase; }
+    .filter-group input, .filter-group select { width: 100%; padding: 12px; border: 2px solid var(--border-color); border-radius: 10px; background: var(--bg-body); color: var(--text-main); font-family: 'Poppins'; font-size: 12px; outline: none; box-sizing: border-box; }
 
-    .btn { border: none; padding: 10px; border-radius: 12px; cursor: pointer; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 6px; font-family: 'Poppins'; transition: all 0.2s; }
+    .btn { border: none; padding: 12px; border-radius: 12px; cursor: pointer; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; font-family: 'Poppins'; transition: all 0.2s; }
     .btn-filter { background: #00acee; color: white; width: 100%; }
     .btn-clear { background: var(--border-color); color: var(--text-sub); width: 100%; }
-    .btn-add { background: var(--accent); color: white; padding: 14px; margin-top: 10px; font-size: 14px; box-shadow: 0 4px 15px rgba(255, 51, 133, 0.4); width: 100%; }
+    .btn-add { background: var(--accent); color: white; padding: 16px; margin-top: 15px; font-size: 15px; box-shadow: 0 4px 15px rgba(255, 51, 133, 0.4); width: 100%; }
 
     .separator { text-align: center; margin: 25px 0; font-weight: 800; color: var(--text-main); font-size: 18px; }
     .separator::after { content: ""; display: block; width: 40px; height: 3px; background: var(--accent); margin: 8px auto; border-radius: 2px; }
 
-    /* CARD SLIM REFINADO */
     .order-card { background: var(--bg-card); border-radius: 20px; margin-bottom: 15px; box-shadow: 0 6px 15px var(--shadow); overflow: hidden; border: 1px solid var(--border-color); transition: transform 0.2s ease; position: relative; }
     .order-card:hover { transform: translateY(-2px); }
     
@@ -97,18 +97,20 @@
     .color-AMARELO { color: #f1c40f; }
     .color-PINK { color: #ff69b4; }
 
+    /* MODAL REORGANIZADO COM ESPAÇAMENTO MELHORADO */
     #modalCadastro { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9999; backdrop-filter: blur(8px); }
-    .modal-body { background: var(--bg-card); color: var(--text-main); width: 95%; max-width: 900px; margin: 10px auto; padding: 30px; border-radius: 30px; max-height: 96vh; overflow-y: auto; box-sizing: border-box; }
+    .modal-body { background: var(--bg-card); color: var(--text-main); width: 95%; max-width: 950px; margin: 10px auto; padding: 40px; border-radius: 30px; max-height: 96vh; overflow-y: auto; box-sizing: border-box; }
     
-    .edit-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 15px; margin-bottom: 20px; }
-    .edit-group { background: var(--bg-body); padding: 15px; border-radius: 15px; border: 1px solid var(--border-color); }
-    .edit-group label { display: block; font-weight: 800; font-size: 9px; color: var(--text-sub); margin-bottom: 6px; text-transform: uppercase; }
-    .edit-group input, .edit-group select { width: 100%; padding: 10px; border: 2px solid var(--border-color); border-radius: 10px; background: var(--bg-card); color: var(--text-main); font-family: 'Poppins'; font-size: 12px; outline: none; }
+    .edit-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-bottom: 25px; }
+    .edit-group { background: var(--bg-body); padding: 20px; border-radius: 18px; border: 1px solid var(--border-color); }
+    .edit-group label { display: block; font-weight: 800; font-size: 10px; color: var(--text-sub); margin-bottom: 10px; text-transform: uppercase; }
+    .edit-group input, .edit-group select { width: 100%; padding: 12px; border: 2px solid var(--border-color); border-radius: 10px; background: var(--bg-card); color: var(--text-main); font-family: 'Poppins'; font-size: 13px; outline: none; box-sizing: border-box; }
 
-    .status-especial-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; align-items: center; margin-top: 8px; }
+    /* STATUS ESPECIAL NO MODAL COM ESPAÇAMENTO CORRIGIDO */
+    .status-especial-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: center; margin-top: 15px; }
     
-    .item-form-row { background: var(--bg-body); border: 2px solid var(--border-color); padding: 15px; border-radius: 15px; margin-bottom: 12px; position: relative; }
-    .btn-delete-item { position: absolute; top: -8px; right: -8px; background: #ff5252; color: white; border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer; font-weight: 900; box-shadow: 0 2px 6px rgba(255,82,82,0.4); }
+    .item-form-row { background: var(--bg-body); border: 2px solid var(--border-color); padding: 25px; border-radius: 20px; margin-bottom: 20px; position: relative; }
+    .btn-delete-item { position: absolute; top: -12px; right: -12px; background: #ff5252; color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; font-weight: 900; box-shadow: 0 2px 8px rgba(255,82,82,0.4); display: flex; align-items: center; justify-content: center; }
     
     .btn-delete-order { background: #ff5252; position: absolute; top: 12px; right: 12px; padding: 6px; border-radius: 8px; color: white; border: none; cursor: pointer; z-index: 5; font-size: 10px; }
   </style>
@@ -145,7 +147,7 @@
           <option value="">Todas as Semanas</option>
         </select>
       </div>
-      <div style="display: flex; gap: 8px;">
+      <div style="display: flex; gap: 15px;">
         <button class="btn btn-filter" onclick="filtrar()">🔍 FILTRAR</button>
         <button class="btn btn-clear" onclick="limpar()">🧹 LIMPAR</button>
       </div>
@@ -159,49 +161,49 @@
 
 <div id="modalCadastro">
   <div class="modal-body">
-    <h2 id="modalTitle" style="color:var(--accent); margin: 0 0 20px 0; font-size: 22px; font-weight: 800;">Novo Pedido</h2>
+    <h2 id="modalTitle" style="color:var(--accent); margin: 0 0 25px 0; font-size: 24px; font-weight: 800;">Novo Pedido</h2>
     <input type="hidden" id="editPedidoId">
     
     <div class="edit-grid">
       <div class="edit-group">
         <label>Informações da Loja</label>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-          <div><label style="font-size:7px">LOJA</label><select id="cLoja"><option value="FF">FF</option><option value="PART">PART</option></select></div>
-          <div><label style="font-size:7px">LOCAL LOGO</label><select id="cLocal"><option value="FT">FT</option><option value="CT/FT">CT/FT</option><option value="2MG/CT/FT">2MG/CT/FT</option><option value="BOLSO">BOLSO</option></select></div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+          <div><label style="font-size:8px">LOJA</label><select id="cLoja"><option value="FF">FF</option><option value="PART">PART</option></select></div>
+          <div><label style="font-size:8px">LOCAL LOGO</label><select id="cLocal"><option value="FT">FT</option><option value="CT/FT">CT/FT</option><option value="2MG/CT/FT">2MG/CT/FT</option><option value="BOLSO">BOLSO</option></select></div>
         </div>
-        <div style="margin-top:10px;"><label style="font-size:7px">NOME DA LOGO</label><input type="text" id="cLogo" placeholder="Logo"></div>
+        <div style="margin-top:15px;"><label style="font-size:8px">NOME DA LOGO</label><input type="text" id="cLogo" placeholder="Logo"></div>
       </div>
       <div class="edit-group">
         <label>Dados do Cliente</label>
-        <div style="margin-bottom:10px;"><label style="font-size:7px">NOME CLIENTE</label><input type="text" id="cNome" placeholder="Nome Completo"></div>
-        <div><label style="font-size:7px">APELIDO / REFERÊNCIA</label><input type="text" id="cApelido" placeholder="Ref"></div>
+        <div style="margin-bottom:15px;"><label style="font-size:8px">NOME CLIENTE</label><input type="text" id="cNome" placeholder="Nome Completo"></div>
+        <div><label style="font-size:8px">APELIDO / REFERÊNCIA</label><input type="text" id="cApelido" placeholder="Ref"></div>
       </div>
       <div class="edit-group">
         <label>Agendamento & Status Especial</label>
-        <div style="display:flex; gap:10px; margin-bottom:12px;">
-          <div style="flex:2;"><label style="font-size:7px">DATA ENTREGA</label><input type="date" id="cData" onchange="setSemana()"></div>
-          <div style="flex:1;"><label style="font-size:7px">DIA</label><input type="text" id="cSemana" readonly style="text-align:center; font-weight:800; color:var(--accent);"></div>
+        <div style="display:grid; grid-template-columns: 2fr 1fr; gap:15px; margin-bottom:15px;">
+          <div><label style="font-size:8px">DATA ENTREGA</label><input type="date" id="cData" onchange="setSemana()"></div>
+          <div><label style="font-size:8px">DIA</label><input type="text" id="cSemana" readonly style="text-align:center; font-weight:800; color:var(--accent); background:var(--bg-body);"></div>
         </div>
         <div class="status-especial-row">
           <label class="chk-item" style="color:#007bff; margin:0;"><input type="checkbox" id="cPComprar"> P/ COMPRAR</label>
-          <div style="display:flex; align-items:center; gap:5px;">
+          <div style="display:flex; flex-direction:column; gap:5px;">
             <label class="chk-item" style="color:orange; margin:0;"><input type="checkbox" id="cReagendado" onchange="toggleReagendado()"> REAGENDADO</label>
-            <input type="date" id="cDataReagendado" style="display:none; padding:4px; border:2px solid orange; border-radius:6px; font-size:10px; width:90px;">
+            <input type="date" id="cDataReagendado" style="display:none; padding:8px; border:2px solid orange; border-radius:10px; font-size:11px; width:100%;">
           </div>
         </div>
       </div>
     </div>
     
-    <div style="background: var(--bg-body); padding: 20px; border-radius: 25px; border: 2px solid var(--border-color);">
-      <h4 style="margin: 0 0 15px 0; font-size: 14px; font-weight: 800;">📦 Itens do Pedido</h4>
+    <div style="background: var(--bg-body); padding: 25px; border-radius: 30px; border: 2px solid var(--border-color);">
+      <h4 style="margin: 0 0 20px 0; font-size: 16px; font-weight: 800;">📦 Itens do Pedido</h4>
       <div id="itensPedidoContainer"></div>
-      <div style="display: flex; gap: 12px; margin-top: 12px;">
-        <button onclick="addLinhaForm()" style="flex:1; padding:10px; border:2px dashed var(--text-sub); border-radius:12px; cursor:pointer; background:var(--bg-card); color:var(--text-sub); font-weight:700;">+ NOVO PRODUTO</button>
-        <button onclick="duplicarLinhaForm()" style="flex:1; padding:10px; border:2px dashed var(--text-sub); border-radius:12px; cursor:pointer; background:var(--bg-card); color:var(--text-sub); font-weight:700;">📋 CLONAR ÚLTIMO</button>
+      <div style="display: flex; gap: 15px; margin-top: 15px;">
+        <button onclick="addLinhaForm()" style="flex:1; padding:12px; border:2px dashed var(--text-sub); border-radius:15px; cursor:pointer; background:var(--bg-card); color:var(--text-sub); font-weight:700;">+ NOVO PRODUTO</button>
+        <button onclick="duplicarLinhaForm()" style="flex:1; padding:12px; border:2px dashed var(--text-sub); border-radius:15px; cursor:pointer; background:var(--bg-card); color:var(--text-sub); font-weight:700;">📋 CLONAR ÚLTIMO</button>
       </div>
     </div>
 
-    <div style="margin-top: 25px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+    <div style="margin-top: 30px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
       <button class="btn btn-add" id="btnSalvar" onclick="salvar()" style="margin-top:0;">💾 SALVAR PEDIDO</button>
       <button class="btn btn-clear" onclick="fecharModal()">❌ CANCELAR</button>
     </div>
@@ -362,13 +364,13 @@
     const row = document.createElement('div'); row.className = 'item-form-row';
     row.innerHTML = `
       <button class="btn-delete-item" onclick="this.parentElement.remove()">×</button>
-      <div style="display: grid; grid-template-columns: 60px 1.5fr 1fr 70px; gap: 10px; align-items: center;">
-        <input type="number" class="iQtd" placeholder="Qtd" min="1" value="${qtd}" style="padding:8px; border:2px solid var(--border-color); border-radius:8px; background:var(--bg-card); color:var(--text-main); font-weight:800;">
-        <select class="iProd" style="padding:8px; border:2px solid var(--border-color); border-radius:8px; background:var(--bg-card); color:var(--text-main); font-weight:700;"><option value="">Produto</option><option ${prod=='POLO BÁSICA'?'selected':''}>POLO BÁSICA</option><option ${prod=='BABYLOOK POLO'?'selected':''}>BABYLOOK POLO</option><option ${prod=='CAMISETA BÁSICA'?'selected':''}>CAMISETA BÁSICA</option><option ${prod=='CAMISETA POLIÉSTER'?'selected':''}>CAMISETA POLIÉSTER</option><option ${prod=='CAMISETA BABYLOOK FEMININA'?'selected':''}>CAMISETA BABYLOOK FEMININA</option></select>
-        <select class="iCor" style="padding:8px; border:2px solid var(--border-color); border-radius:8px; background:var(--bg-card); color:var(--text-main); font-weight:700;"><option value="">Cor</option><option ${cor=='BRANCO'?'selected':''}>BRANCO</option><option ${cor=='PRETO'?'selected':''}>PRETO</option><option ${cor=='CINZA MESCLA'?'selected':''}>CINZA MESCLA</option><option ${cor=='CINZA ESCURO'?'selected':''}>CINZA ESCURO</option><option ${cor=='AZUL TURQUESA'?'selected':''}>AZUL TURQUESA</option><option ${cor=='AZUL ROYAL'?'selected':''}>AZUL ROYAL</option><option ${cor=='AZUL MARINHO'?'selected':''}>AZUL MARINHO</option><option ${cor=='VERDE BANDEIRA'?'selected':''}>VERDE BANDEIRA</option><option ${cor=='VERDE LIMÃO'?'selected':''}>VERDE LIMÃO</option><option ${cor=='VERDE MUSGO'?'selected':''}>VERDE MUSGO</option><option ${cor=='VERMELHO'?'selected':''}>VERMELHO</option><option ${cor=='VINHO'?'selected':''}>VINHO</option><option ${cor=='LARANJA'?'selected':''}>LARANJA</option><option ${cor=='AMARELO'?'selected':''}>AMARELO</option><option ${cor=='PINK'?'selected':''}>PINK</option></select>
-        <select class="iTam" style="padding:8px; border:2px solid var(--border-color); border-radius:8px; background:var(--bg-card); color:var(--text-main); font-weight:700;"><option ${tam=='U'?'selected':''}>U</option><option ${tam=='P'?'selected':''}>P</option><option ${tam=='M'?'selected':''}>M</option><option ${tam=='G'?'selected':''}>G</option><option ${tam=='GG'?'selected':''}>GG</option><option ${tam=='EG'?'selected':''}>EG</option></select>
+      <div style="display: grid; grid-template-columns: 70px 1.5fr 1fr 80px; gap: 15px; align-items: center;">
+        <input type="number" class="iQtd" placeholder="Qtd" min="1" value="${qtd}" style="padding:10px; border:2px solid var(--border-color); border-radius:10px; background:var(--bg-card); color:var(--text-main); font-weight:800;">
+        <select class="iProd" style="padding:10px; border:2px solid var(--border-color); border-radius:10px; background:var(--bg-card); color:var(--text-main); font-weight:700;"><option value="">Produto</option><option ${prod=='POLO BÁSICA'?'selected':''}>POLO BÁSICA</option><option ${prod=='BABYLOOK POLO'?'selected':''}>BABYLOOK POLO</option><option ${prod=='CAMISETA BÁSICA'?'selected':''}>CAMISETA BÁSICA</option><option ${prod=='CAMISETA POLIÉSTER'?'selected':''}>CAMISETA POLIÉSTER</option><option ${prod=='CAMISETA BABYLOOK FEMININA'?'selected':''}>CAMISETA BABYLOOK FEMININA</option></select>
+        <select class="iCor" style="padding:10px; border:2px solid var(--border-color); border-radius:10px; background:var(--bg-card); color:var(--text-main); font-weight:700;"><option value="">Cor</option><option ${cor=='BRANCO'?'selected':''}>BRANCO</option><option ${cor=='PRETO'?'selected':''}>PRETO</option><option ${cor=='CINZA MESCLA'?'selected':''}>CINZA MESCLA</option><option ${cor=='CINZA ESCURO'?'selected':''}>CINZA ESCURO</option><option ${cor=='AZUL TURQUESA'?'selected':''}>AZUL TURQUESA</option><option ${cor=='AZUL ROYAL'?'selected':''}>AZUL ROYAL</option><option ${cor=='AZUL MARINHO'?'selected':''}>AZUL MARINHO</option><option ${cor=='VERDE BANDEIRA'?'selected':''}>VERDE BANDEIRA</option><option ${cor=='VERDE LIMÃO'?'selected':''}>VERDE LIMÃO</option><option ${cor=='VERDE MUSGO'?'selected':''}>VERDE MUSGO</option><option ${cor=='VERMELHO'?'selected':''}>VERMELHO</option><option ${cor=='VINHO'?'selected':''}>VINHO</option><option ${cor=='LARANJA'?'selected':''}>LARANJA</option><option ${cor=='AMARELO'?'selected':''}>AMARELO</option><option ${cor=='PINK'?'selected':''}>PINK</option></select>
+        <select class="iTam" style="padding:10px; border:2px solid var(--border-color); border-radius:10px; background:var(--bg-card); color:var(--text-main); font-weight:700;"><option ${tam=='U'?'selected':''}>U</option><option ${tam=='P'?'selected':''}>P</option><option ${tam=='M'?'selected':''}>M</option><option ${tam=='G'?'selected':''}>G</option><option ${tam=='GG'?'selected':''}>GG</option><option ${tam=='EG'?'selected':''}>EG</option></select>
       </div>
-      <input type="text" class="iObs" placeholder="Observação do item..." value="${obs}" style="width:100%; padding:8px; border:2px solid var(--border-color); border-radius:8px; font-size:10px; margin-top:10px; background:var(--bg-card); color:var(--text-main);">`;
+      <input type="text" class="iObs" placeholder="Observação do item..." value="${obs}" style="width:100%; padding:10px; border:2px solid var(--border-color); border-radius:10px; font-size:11px; margin-top:12px; background:var(--bg-card); color:var(--text-main);">`;
     container.appendChild(row);
   }
 
