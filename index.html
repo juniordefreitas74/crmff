@@ -7,27 +7,25 @@
     :root {
       --bg-body: #f8f9fa; --bg-card: #ffffff; --text-main: #1a1a1a; --text-sub: #6c757d; --border-color: #dee2e6; --shadow: rgba(0,0,0,0.08); --accent: #dc3545;
       --card-p-comprar: #eef2ff; --card-comprado: #f0fff4; --card-producao: #fffaf0; --card-produzido: #feebc8; --card-reagendado: #fff5f5;
-      --logo-url: url('logobranco.jpg'); /* LOGO FUNDO BRANCO */
     }
     body.dark-mode {
       --bg-body: #121212; --bg-card: #1e1e1e; --text-main: #f8f9fa; --text-sub: #adb5bd; --border-color: #2d2d2d; --shadow: rgba(0,0,0,0.5);
       --card-p-comprar: #1a237e; --card-comprado: #1b5e20; --card-producao: #4e342e; --card-produzido: #5d4037; --card-reagendado: #7b1fa2;
-      --logo-url: url('logopreto.png'); /* LOGO FUNDO PRETO */
     }
     body { font-family: 'Poppins', sans-serif; background-color: var(--bg-body); color: var(--text-main); margin: 0; padding: 20px 10px; transition: all 0.3s ease; }
     
     /* LOGIN SCREEN */
     #loginScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-body); z-index: 10000; display: flex; align-items: center; justify-content: center; }
     .login-box { background: var(--bg-card); padding: 40px; border-radius: 30px; box-shadow: 0 10px 30px var(--shadow); width: 90%; max-width: 400px; text-align: center; border: 1px solid var(--border-color); }
-    .login-logo { width: 180px; height: 120px; margin: 0 auto 20px; background: var(--logo-url) center no-repeat; background-size: contain; }
-    .login-box h2 { color: var(--accent); font-weight: 800; margin-bottom: 25px; }
+    .login-logo-img { width: 100%; max-width: 200px; height: auto; margin-bottom: 25px; }
+    .login-box h2 { color: var(--accent); font-weight: 800; margin-bottom: 25px; font-size: 20px; }
     .login-box input { width: 100%; padding: 15px; border-radius: 12px; border: 2px solid var(--border-color); background: var(--bg-body); color: var(--text-main); font-family: 'Poppins'; margin-bottom: 15px; outline: none; box-sizing: border-box; }
     .btn-login { background: var(--accent); color: white; border: none; padding: 15px; width: 100%; border-radius: 12px; font-weight: 800; cursor: pointer; transition: 0.2s; }
     .btn-login:hover { transform: scale(1.02); }
 
     .container { max-width: 1400px; margin: 0 auto; position: relative; display: none; }
     .header-home { display: flex; align-items: center; justify-content: space-between; margin-bottom: 30px; }
-    .home-logo { width: 100px; height: 60px; background: var(--logo-url) center no-repeat; background-size: contain; }
+    .home-logo-img { height: 60px; width: auto; max-width: 150px; }
     .btn-dark-toggle { background: var(--bg-card); border: 1px solid var(--border-color); padding: 12px; border-radius: 50%; cursor: pointer; box-shadow: 0 4px 12px var(--shadow); font-size: 20px; }
     
     .tabs { display: flex; gap: 10px; margin-bottom: 25px; border-bottom: 2px solid var(--border-color); padding-bottom: 12px; flex-wrap: wrap; }
@@ -106,7 +104,7 @@
 
 <div id="loginScreen">
   <div class="login-box">
-    <div class="login-logo"></div>
+    <img src="logobranco.jpg" id="loginLogo" class="login-logo-img" alt="Logo">
     <h2>🔒 Acesso ao CRM</h2>
     <input type="text" id="inputUser" placeholder="Usuário">
     <input type="password" id="inputSenha" placeholder="Senha">
@@ -116,7 +114,7 @@
 
 <div class="container" id="mainContainer">
   <div class="header-home">
-    <div class="home-logo"></div>
+    <img src="logobranco.jpg" id="homeLogo" class="home-logo-img" alt="Logo">
     <button class="btn-dark-toggle" onclick="toggleDarkMode()" id="darkModeBtn">🌙</button>
   </div>
   
@@ -293,7 +291,21 @@
   async function excluirUsuario(u) { if(!confirm(`Excluir usuário ${u}?`)) return; await fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'excluirUsuario', usuario: u }) }); setTimeout(listarUsuarios, 1000); }
 
   // 📦 CORE LOGIC
-  function toggleDarkMode() { document.body.classList.toggle('dark-mode'); document.getElementById('darkModeBtn').innerText = document.body.classList.contains('dark-mode') ? '☀️' : '🌙'; }
+  function toggleDarkMode() {
+    const body = document.body;
+    body.classList.toggle('dark-mode');
+    const isDark = body.classList.contains('dark-mode');
+    document.getElementById('darkModeBtn').innerText = isDark ? '☀️' : '🌙';
+    
+    // Troca as imagens das logos
+    const logoLogin = document.getElementById('loginLogo');
+    const logoHome = document.getElementById('homeLogo');
+    const src = isDark ? 'logopreto.png' : 'logobranco.jpg';
+    
+    if(logoLogin) logoLogin.src = src;
+    if(logoHome) logoHome.src = src;
+  }
+
   function mudarAba(aba) { abaAtual = aba; document.getElementById('tabAtivos').classList.toggle('active', aba === 'ATIVOS'); document.getElementById('tabEnviados').classList.toggle('active', aba === 'ENVIADOS'); carregar(); }
   function gerarFiltroSemanas() {
     const select = document.getElementById('filtroSemana'); select.innerHTML = '<option value="">Todas as Semanas</option>';
