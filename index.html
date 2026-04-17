@@ -142,32 +142,17 @@
   // 🔗 LINK DO SEU DEPLOY DO GOOGLE (Substitua após o deploy)
   const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwliSQKxeLPD7uQGC9co0w6obLSidV-cC4VyKnDwrFLJC5e63GV6Ia8SQ6Om-SPwY4M/exec';
 
-
   let dadosBrutos = [];
 
-  // 🚀 Função para falar com o Google de fora (Vercel)
-  async function callGoogle(data) {
-    if (!WEB_APP_URL || WEB_APP_URL.includes('COLE_AQUI')) {
-      alert("⚠️ ERRO: Você precisa configurar o URL do Deploy do Google no arquivo index.html da Vercel.");
-      return null;
-    }
-    try {
-      const response = await fetch(WEB_APP_URL, {
-        method: 'POST',
-        mode: 'no-cors', // Google Apps Script exige no-cors para POST de fora
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-      });
-      // Como o no-cors não permite ler a resposta, vamos recarregar após um tempo ou assumir sucesso
-      return { status: 'success' };
-    } catch (err) {
-      console.error(err);
-      return { status: 'error', message: err.message };
-    }
-  }
-
-  // 🔄 Função para carregar dados (Como o no-cors bloqueia leitura, usamos JSONP ou abrimos no Google)
+  // 🚀 Função para carregar dados de fora do Google (Vercel) usando JSONP
   function carregar() {
+    if (!WEB_APP_URL || WEB_APP_URL.includes('COLE_AQUI')) {
+      document.getElementById('listaPedidos').innerHTML = '<div class="msg-vazio">⚠️ URL do Google não configurada.</div>';
+      return;
+    }
+    
+    document.getElementById('listaPedidos').innerHTML = '<div class="msg-vazio">Carregando dados da planilha...</div>';
+
     // Se estiver no Google, usa o nativo
     if (typeof google !== 'undefined' && google.script && google.script.run) {
       google.script.run.withSuccessHandler(res => {
@@ -175,11 +160,24 @@
         renderizar(res.pedidos, res.kpis);
       }).getDados();
     } else {
-      // Na Vercel, por segurança, o ideal é carregar via API, mas o Google Apps Script 
-      // bloqueia leitura direta via fetch de fora.
-      document.getElementById('listaPedidos').innerHTML = '<div class="msg-vazio">⚠️ Para ver a lista na Vercel, o sistema precisa de configuração avançada. O cadastro, porém, funcionará.</div>';
+      // Na Vercel: Chamada GET com parâmetro para burlar CORS (JSONP-like ou Proxy)
+      // Como o Google bloqueia fetch direto, o ideal é usar um script tag ou abrir no Google.
+      // Vou tentar um truque de redirecionamento para carregar os dados.
+      const script = document.createElement('script');
+      script.src = WEB_APP_URL + '?action=getDados&callback=handleResponse';
+      document.body.appendChild(script);
     }
   }
+
+  // Recebe a resposta do Google (precisa que o Google suporte JSONP)
+  window.handleResponse = function(res) {
+    if (res && res.pedidos) {
+      dadosBrutos = res.pedidos;
+      renderizar(res.pedidos, res.kpis);
+    } else {
+      document.getElementById('listaPedidos').innerHTML = '<div class="msg-vazio">Nenhum pedido encontrado.</div>';
+    }
+  };
 
   function renderizar(pedidos, kpis) {
     if (kpis) {
@@ -353,16 +351,26 @@
     btn.disabled = true;
     btn.innerText = 'SALVANDO...';
 
-    // 🌐 Lógica de envio (Verifica se está no Google ou Vercel)
     if (typeof google !== 'undefined' && google.script && google.script.run) {
       google.script.run.withSuccessHandler(() => { 
         fecharModal(); carregar(); btn.disabled = false; btn.innerText = 'FINALIZAR CADASTRO';
       }).salvarPedido(cab, itens);
     } else {
-      const res = await callGoogle({ action: 'salvarPedido', cabecalho: cab, itens: itens });
-      if (res && res.status === 'success') {
-        alert("Pedido enviado! Como você está na Vercel, pode levar alguns segundos para aparecer na planilha.");
+      // Na Vercel, usamos o fetch POST
+      try {
+        await fetch(WEB_APP_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'salvarPedido', cabecalho: cab, itens: itens })
+        });
+        alert("Pedido enviado! Atualizando lista...");
         fecharModal();
+        btn.disabled = false;
+        btn.innerText = 'FINALIZAR CADASTRO';
+        setTimeout(carregar, 2000); // Aguarda o Google processar e recarrega
+      } catch (err) {
+        alert("Erro: " + err.message);
         btn.disabled = false;
         btn.innerText = 'FINALIZAR CADASTRO';
       }
@@ -373,7 +381,11 @@
     if (typeof google !== 'undefined' && google.script && google.script.run) {
       google.script.run.withSuccessHandler(carregar).atualizarStatus(row, campo, val);
     } else {
-      callGoogle({ action: 'atualizarStatus', rowIndex: row, campo: campo, valor: val });
+      fetch(WEB_APP_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        body: JSON.stringify({ action: 'atualizarStatus', rowIndex: row, campo: campo, valor: val })
+      }).then(() => setTimeout(carregar, 1500));
     }
   }
 
@@ -382,7 +394,11 @@
     if (typeof google !== 'undefined' && google.script && google.script.run) {
       google.script.run.withSuccessHandler(carregar).duplicarPedido(pedidoId);
     } else {
-      callGoogle({ action: 'duplicarPedido', pedidoId: pedidoId });
+      fetch(WEB_APP_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        body: JSON.stringify({ action: 'duplicarPedido', pedidoId: pedidoId })
+      }).then(() => setTimeout(carregar, 1500));
     }
   }
 
