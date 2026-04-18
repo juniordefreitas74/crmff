@@ -53,6 +53,9 @@
     .separator::after { content: ""; display: block; width: 40px; height: 3px; background: var(--accent); margin: 8px auto; border-radius: 2px; }
 
     .order-card { background: var(--bg-card); border-radius: 20px; margin-bottom: 15px; box-shadow: 0 4px 10px var(--shadow); overflow: hidden; border: 1px solid var(--border-color); position: relative; }
+
+    /* TRANSPARÊNCIA 20% PARA PEDIDOS ENVIADOS */
+    .order-card.card-enviado { opacity: 0.2; }
     
     .status-p-comprar { background: var(--card-p-comprar) !important; }
     .status-comprado { background: var(--card-comprado) !important; border-left: 8px solid #28a745; }
@@ -113,6 +116,16 @@
     
     .user-list-item { display: flex; justify-content: space-between; align-items: center; background: var(--bg-body); padding: 15px; border-radius: 12px; margin-bottom: 10px; border: 1px solid var(--border-color); }
     .btn-user-action { padding: 8px 15px; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; border: none; margin-left: 5px; }
+
+    /* MODAL DE IMPRESSÃO */
+    #modalImpressao { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9999; backdrop-filter: blur(8px); }
+    .print-body { background: #fff; color: #000; width: 95%; max-width: 700px; margin: 20px auto; padding: 30px; border-radius: 20px; max-height: 90vh; overflow-y: auto; box-sizing: border-box; }
+    @media print {
+      body * { visibility: hidden; }
+      #areaPrint, #areaPrint * { visibility: visible; }
+      #areaPrint { position: fixed; top: 0; left: 0; width: 100%; padding: 20px; box-sizing: border-box; }
+      .no-print { display: none !important; }
+    }
   </style>
 </head>
 <body>
@@ -136,7 +149,7 @@
   <div class="tabs">
     <div class="tab active" id="tabAtivos" onclick="mudarAba('ATIVOS')">📦 PEDIDOS ATIVOS</div>
     <div class="tab" id="tabEnviados" onclick="mudarAba('ENVIADOS')">✅ HISTÓRICO ENVIADOS</div>
-    <div class="tab" id="tabConfig" onclick="abrirConfig()" style="display:none;">⚙️ CONFIGURAÇÕES</div>
+    <div class="tab" id="tabConfig" style="display:none;" onclick="abrirConfig()">⚙️ CONFIG</div>
     <div class="tab" onclick="logout()" style="color:#dc3545;">🚪 SAIR</div>
   </div>
 
@@ -209,6 +222,8 @@
           <div><label style="font-size:8px">DATA ENTREGA</label><input type="date" id="cData" onchange="setSemana()"></div>
           <div><label style="font-size:8px">DIA</label><input type="text" id="cSemana" readonly style="text-align:center; font-weight:800; color:var(--accent); background:var(--bg-body);"></div>
         </div>
+        <!-- HORA DO ENVIO NO CADASTRO -->
+        <div style="margin-bottom:15px;"><label style="font-size:8px">HORA DO ENVIO</label><input type="time" id="cHora" style="width:100%; padding:12px; border:2px solid var(--border-color); border-radius:10px; background:var(--bg-card); color:var(--text-main); font-family:'Poppins'; font-size:13px; outline:none; box-sizing:border-box;"></div>
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
           <label class="chk-item" style="color:#007bff; font-size:11px;"><input type="checkbox" id="cPComprar"> P/ COMPRAR</label>
           <div style="display:flex; flex-direction:column; gap:5px;">
@@ -229,6 +244,39 @@
     <div style="margin-top: 30px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
       <button class="btn btn-add" id="btnSalvar" onclick="salvar()" style="margin-top:0;">💾 SALVAR PEDIDO</button>
       <button class="btn btn-clear" onclick="fecharModal()">❌ CANCELAR</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL IMPRESSÃO -->
+<div id="modalImpressao">
+  <div class="print-body">
+    <div id="areaPrint">
+      <div style="text-align:center; margin-bottom:20px; border-bottom:2px solid #000; padding-bottom:15px;">
+        <h2 id="printTitulo" style="margin:0; font-size:18px; font-weight:800;"></h2>
+        <p id="printSubtitulo" style="margin:5px 0 0 0; font-size:12px; color:#555;"></p>
+      </div>
+      <table id="printTabela" style="width:100%; border-collapse:collapse; font-family:'Poppins',sans-serif;">
+        <thead>
+          <tr style="background:#1a1a1a; color:white;">
+            <th style="padding:10px; text-align:left; font-size:12px;">QTD</th>
+            <th style="padding:10px; text-align:left; font-size:12px;">PRODUTO</th>
+            <th style="padding:10px; text-align:left; font-size:12px;">COR</th>
+            <th style="padding:10px; text-align:left; font-size:12px;">TAM</th>
+          </tr>
+        </thead>
+        <tbody id="printCorpo"></tbody>
+        <tfoot>
+          <tr style="background:#f0f0f0; font-weight:800;">
+            <td id="printTotal" style="padding:10px; font-size:13px; border-top:2px solid #000;"></td>
+            <td colspan="3" style="padding:10px; font-size:11px; border-top:2px solid #000;">TOTAL DE PEÇAS</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+    <div class="no-print" style="display:flex; gap:15px; margin-top:20px;">
+      <button onclick="window.print()" style="flex:1; padding:14px; background:#1a1a1a; color:white; border:none; border-radius:10px; font-weight:800; cursor:pointer; font-family:'Poppins'; font-size:14px;">🖨️ IMPRIMIR</button>
+      <button onclick="fecharImpressao()" style="flex:1; padding:14px; background:#e2e8f0; color:#1a1a1a; border:none; border-radius:10px; font-weight:800; cursor:pointer; font-family:'Poppins'; font-size:14px;">❌ FECHAR</button>
     </div>
   </div>
 </div>
@@ -320,7 +368,15 @@
     if(logoHome) logoHome.src = src;
   }
 
-  function mudarAba(aba) { abaAtual = aba; document.getElementById('tabAtivos').classList.toggle('active', aba === 'ATIVOS'); document.getElementById('tabEnviados').classList.toggle('active', aba === 'ENVIADOS'); carregar(); }
+  function mudarAba(aba) {
+    abaAtual = aba;
+    document.getElementById('tabAtivos').classList.toggle('active', aba === 'ATIVOS');
+    document.getElementById('tabEnviados').classList.toggle('active', aba === 'ENVIADOS');
+    // Atualiza o título da lista conforme a aba
+    document.getElementById('tituloLista').innerText = aba === 'ENVIADOS' ? 'PEDIDOS ENVIADOS' : 'PEDIDOS ATIVOS';
+    carregar();
+  }
+
   function gerarFiltroSemanas() {
     const select = document.getElementById('filtroSemana'); select.innerHTML = '<option value="">Todas as Semanas</option>';
     const hoje = new Date(); const diaSemana = hoje.getDay(); const diffSeg = diaSemana === 0 ? -6 : 1 - diaSemana;
@@ -331,6 +387,7 @@
       segunda.setDate(segunda.getDate() + 7);
     }
   }
+
   function carregar() { document.getElementById('listaPedidos').innerHTML = '<div class="msg-vazio">Sincronizando...</div>'; const script = document.createElement('script'); script.src = WEB_APP_URL + '?action=getDados&tipo=' + abaAtual + '&callback=handleResponse'; document.body.appendChild(script); }
   window.handleResponse = function(res) { if (res && res.pedidos) { dadosBrutos = res.pedidos; renderizar(res.pedidos, res.kpis); } };
   
@@ -352,6 +409,9 @@
       const itens = grupos[id]; const p = itens[0]; 
       
       let statusClass = '';
+      // Classe de transparência para pedidos enviados
+      let enviadoClass = (abaAtual === 'ENVIADOS') ? 'card-enviado' : '';
+
       if (abaAtual === 'ATIVOS') {
         if (p.REAGENDADO == 'TRUE') statusClass = 'status-reagendado';
         else if (p.PRODUZIDO == 'TRUE' && p.ETIQ_LIBERADA == 'TRUE') statusClass = 'status-liberado';
@@ -362,9 +422,57 @@
       }
       
       let pendente = !p.DATA || itens.some(i => !i.PRODUTO || !i.COR);
-      container.innerHTML += `<div class="order-card ${statusClass}"><button class="btn-delete-order" onclick="excluirPedido('${id}')">🗑️</button><div class="order-header-centered">PEDIDO #${id}</div><div class="card-main-row"><div><div class="data-label">ORIGEM / LOGO</div><div class="data-value">${p.LOJA} • ${p.LOCAL}</div><div class="data-value" style="font-size:10px; opacity:0.8;">${p.LOGO}</div>${pendente ? '<div class="alert-pendente">⚠️ DADOS PENDENTES</div>' : ''}</div><div><div class="data-label">CLIENTE</div><div class="data-value" style="font-size:14px;">${p.NOME}</div><div class="data-label" style="margin-top:2px;">REF: ${p.APELIDO}</div></div><div><div class="data-label">ENTREGA</div><div class="data-value" style="font-size:13px;">${p.DATA || '---'}</div><div class="data-label" style="font-size:9px;">${p.SEMANA || '---'}</div>${p.REAGENDADO == 'TRUE' ? `<div class="reagendado-tag">🗓️ ${p.DATA_REAGENDADO}</div>` : ''}</div><div class="status-box">${chk(p.rowIndex, 'COMPRADO', p.COMPRADO)}${chk(p.rowIndex, 'MATRIZ', p.MATRIZ)}${chk(p.rowIndex, 'AMOSTRA', p.AMOSTRA)}${chk(p.rowIndex, 'APROVADO', p.APROVADO)}</div><div class="status-box">${chk(p.rowIndex, 'EM_PRODUCAO', p.EM_PRODUCAO)}${chk(p.rowIndex, 'PRODUZIDO', p.PRODUZIDO)}${chk(p.rowIndex, 'ETIQ_LIBERADA', p.ETIQ_LIBERADA)}${chk(p.rowIndex, 'ENVIADO', p.ENVIADO)}</div><div class="card-actions-right"><div class="chk-item" style="margin-bottom:3px;"><span style="color:#007bff; font-weight:800; font-size:9px;">P/ COMPRAR</span><input type="checkbox" ${p.P_COMPRAR == 'TRUE' ? 'checked' : ''} onchange="atualizar(${p.rowIndex}, 'P_COMPRAR', this.checked)"></div><div class="chk-item" style="margin-bottom:3px;"><span style="color:#fd7e14; font-weight:800; font-size:9px;">REAGENDADO</span><input type="checkbox" ${p.REAGENDADO == 'TRUE' ? 'checked' : ''} onchange="promptReagendar(${p.rowIndex}, this.checked)"></div><div style="display:flex; gap:5px;"><button class="btn-card-right" style="background:#007bff; color:white;" onclick="abrirEdicao('${id}')">✏️ EDITAR</button><button class="btn-card-right" style="background:var(--accent); color:white;" onclick="duplicarPedido('${id}')">📋 CLONAR</button></div></div></div><div class="items-table-area"><table style="width:100%; border-collapse: collapse;"><thead><tr style="font-size:9px; opacity:0.7; text-align:left; border-bottom: 1px solid var(--border-color);"><th style="padding-bottom:4px;">QTD</th><th style="padding-bottom:4px;">PRODUTO</th><th style="padding-bottom:4px;">COR</th><th style="padding-bottom:4px;">TAM</th></tr></thead><tbody>${itens.map(i => `<tr style="border-bottom: 1px solid var(--border-color);"><td style="font-size:11px; font-weight:800; padding:4px 0;">${i.QTD}</td><td style="font-size:11px; font-weight:700;">${i.PRODUTO || '---'}</td><td style="font-size:11px; font-weight:800;"><span class="color-text color-${getColorKey(i.COR)}">${i.COR || '---'}</span></td><td style="font-size:11px; font-weight:800;">${i.TAMANHO}</td></tr>`).join('')}</tbody></table><div style="position:relative; background:rgba(0,0,0,0.05); border-radius:10px; padding:8px; font-size:11px; border:1px solid var(--border-color);"><div style="position:absolute; top:-6px; left:8px; background:var(--bg-card); font-size:7px; padding:0 4px; font-weight:800; color:var(--accent);">OBS</div>${p.OBS || 'Sem anotações.'}</div></div></div>`;
+
+      // Hora do envio no card
+      const horaEnvio = p.HORA ? `<div class="data-label" style="margin-top:4px;">HORA ENVIO</div><div class="data-value" style="font-size:11px;">${p.HORA}</div>` : '';
+
+      // Nome da logo aumentado no card principal
+      const logoNome = `<div class="data-value" style="font-size:14px; font-weight:800;">${p.LOGO}</div>`;
+
+      // Agrupamento de itens iguais (mesmo produto + cor + tamanho)
+      const itensAgrupados = agruparItens(itens);
+
+      container.innerHTML += `<div class="order-card ${statusClass} ${enviadoClass}"><button class="btn-delete-order" onclick="excluirPedido('${id}')">🗑️</button><div class="order-header-centered">PEDIDO #${id}</div><div class="card-main-row"><div><div class="data-label">ORIGEM / LOGO</div><div class="data-value">${p.LOJA} • ${p.LOCAL}</div>${logoNome}${pendente ? '<div class="alert-pendente">⚠️ DADOS PENDENTES</div>' : ''}</div><div><div class="data-label">CLIENTE</div><div class="data-value" style="font-size:14px;">${p.NOME}</div><div class="data-label" style="margin-top:2px;">REF: ${p.APELIDO}</div></div><div><div class="data-label">ENTREGA</div><div class="data-value" style="font-size:13px;">${p.DATA || '---'}</div><div class="data-label" style="font-size:9px;">${p.SEMANA || '---'}</div>${horaEnvio}${p.REAGENDADO == 'TRUE' ? `<div class="reagendado-tag">🗓️ ${p.DATA_REAGENDADO}</div>` : ''}</div><div class="status-box">${chk(p.rowIndex, 'COMPRADO', p.COMPRADO)}${chk(p.rowIndex, 'MATRIZ', p.MATRIZ)}${chk(p.rowIndex, 'AMOSTRA', p.AMOSTRA)}${chk(p.rowIndex, 'APROVADO', p.APROVADO)}</div><div class="status-box">${chk(p.rowIndex, 'EM_PRODUCAO', p.EM_PRODUCAO)}${chk(p.rowIndex, 'PRODUZIDO', p.PRODUZIDO)}${chk(p.rowIndex, 'ETIQ_LIBERADA', p.ETIQ_LIBERADA)}${chk(p.rowIndex, 'ENVIADO', p.ENVIADO)}</div><div class="card-actions-right"><div class="chk-item" style="margin-bottom:3px;"><span style="color:#007bff; font-weight:800; font-size:9px;">P/ COMPRAR</span><input type="checkbox" ${p.P_COMPRAR == 'TRUE' ? 'checked' : ''} onchange="atualizar(${p.rowIndex}, 'P_COMPRAR', this.checked)"></div><div class="chk-item" style="margin-bottom:3px;"><span style="color:#fd7e14; font-weight:800; font-size:9px;">REAGENDADO</span><input type="checkbox" ${p.REAGENDADO == 'TRUE' ? 'checked' : ''} onchange="promptReagendar(${p.rowIndex}, this.checked)"></div><div style="display:flex; gap:5px;"><button class="btn-card-right" style="background:#007bff; color:white;" onclick="abrirEdicao('${id}')">✏️ EDITAR</button><button class="btn-card-right" style="background:var(--accent); color:white;" onclick="duplicarPedido('${id}')">📋 CLONAR</button></div><button class="btn-card-right" style="background:#28a745; color:white; margin-top:3px;" onclick="abrirImpressao('${id}')">🖨️ IMPRIMIR</button></div></div><div class="items-table-area"><table style="width:100%; border-collapse: collapse;"><thead><tr style="font-size:9px; opacity:0.7; text-align:left; border-bottom: 1px solid var(--border-color);"><th style="padding-bottom:4px;">QTD</th><th style="padding-bottom:4px;">PRODUTO</th><th style="padding-bottom:4px;">COR</th><th style="padding-bottom:4px;">TAM</th></tr></thead><tbody>${itensAgrupados.map(i => `<tr style="border-bottom: 1px solid var(--border-color);"><td style="font-size:11px; font-weight:800; padding:4px 0;">${i.QTD}</td><td style="font-size:11px; font-weight:700;">${i.PRODUTO || '---'}</td><td style="font-size:11px; font-weight:800;"><span class="color-text color-${getColorKey(i.COR)}">${i.COR || '---'}</span></td><td style="font-size:11px; font-weight:800;">${i.TAMANHO}</td></tr>`).join('')}</tbody></table><div style="position:relative; background:rgba(0,0,0,0.05); border-radius:10px; padding:8px; font-size:11px; border:1px solid var(--border-color);"><div style="position:absolute; top:-6px; left:8px; background:var(--bg-card); font-size:7px; padding:0 4px; font-weight:800; color:var(--accent);">OBS</div>${p.OBS || 'Sem anotações.'}</div></div></div>`;
     }
   }
+
+  // Função para agrupar itens iguais somando quantidades
+  function agruparItens(itens) {
+    const mapa = {};
+    itens.forEach(i => {
+      const chave = `${(i.PRODUTO||'').trim()}|${(i.COR||'').trim()}|${(i.TAMANHO||'').trim()}`;
+      if (!mapa[chave]) {
+        mapa[chave] = { QTD: 0, PRODUTO: i.PRODUTO, COR: i.COR, TAMANHO: i.TAMANHO };
+      }
+      mapa[chave].QTD += parseInt(i.QTD) || 0;
+    });
+    return Object.values(mapa);
+  }
+
+  // Função para abrir o modal de impressão com itens agrupados
+  function abrirImpressao(pedidoId) {
+    const itens = dadosBrutos.filter(p => String(p.ID) === String(pedidoId));
+    if (!itens.length) return;
+    const p = itens[0];
+    document.getElementById('printTitulo').innerText = `PEDIDO #${pedidoId} — ${p.NOME}`;
+    document.getElementById('printSubtitulo').innerText = `Logo: ${p.LOGO} | Entrega: ${p.DATA || '---'} ${p.HORA ? '| Hora: ' + p.HORA : ''} | Ref: ${p.APELIDO}`;
+    
+    const agrupados = agruparItens(itens);
+    const totalPecas = agrupados.reduce((acc, i) => acc + i.QTD, 0);
+    
+    const corpo = document.getElementById('printCorpo');
+    corpo.innerHTML = '';
+    agrupados.forEach((i, idx) => {
+      const tr = document.createElement('tr');
+      tr.style.background = idx % 2 === 0 ? '#f9f9f9' : '#ffffff';
+      tr.innerHTML = `<td style="padding:9px 10px; font-size:13px; font-weight:800;">${i.QTD}</td><td style="padding:9px 10px; font-size:12px; font-weight:700;">${i.PRODUTO || '---'}</td><td style="padding:9px 10px; font-size:12px; font-weight:800; text-transform:uppercase;">${i.COR || '---'}</td><td style="padding:9px 10px; font-size:12px; font-weight:800;">${i.TAMANHO || '---'}</td>`;
+      corpo.appendChild(tr);
+    });
+    document.getElementById('printTotal').innerText = totalPecas;
+    document.getElementById('modalImpressao').style.display = 'block';
+  }
+
+  function fecharImpressao() { document.getElementById('modalImpressao').style.display = 'none'; }
 
   function getColorKey(cor) { if (!cor) return ''; const c = cor.toUpperCase(); if (c.includes('BRANCO')) return 'BRANCO'; if (c.includes('PRETO')) return 'PRETO'; if (c.includes('AZUL')) return 'AZUL'; if (c.includes('VERDE')) return 'VERDE'; if (c.includes('VERMELHO PASTEL')) return 'VERMELHO'; if (c.includes('VERMELHO')) return 'VERMELHO'; if (c.includes('VINHO')) return 'VINHO'; if (c.includes('LARANJA')) return 'LARANJA'; if (c.includes('AMARELO')) return 'AMARELO'; if (c.includes('PINK')) return 'PINK'; if (c.includes('MARROM')) return 'MARROM'; if (c.includes('ROXO')) return 'ROXO'; return ''; }
   function chk(row, campo, val) { return `<label class="chk-item"><input type="checkbox" ${val == 'TRUE' ? 'checked' : ''} onchange="atualizar(${row}, '${campo}', this.checked)"> ${campo.replace('_', ' ')}</label>`; }
@@ -384,7 +492,20 @@
   }
   function limpar() { document.getElementById('filtroBusca').value = ''; document.getElementById('filtroStatus').value = ''; document.getElementById('filtroSemana').value = ''; carregar(); }
   function abrirModal() {
-    document.getElementById('modalTitle').innerText = 'Novo Pedido'; document.getElementById('editPedidoId').value = ''; document.getElementById('cNome').value = ''; document.getElementById('cLogo').value = ''; document.getElementById('cApelido').value = ''; document.getElementById('cData').value = ''; document.getElementById('cSemana').value = ''; document.getElementById('cPComprar').checked = false; document.getElementById('cReagendado').checked = false; document.getElementById('cDataReagendado').style.display = 'none'; document.getElementById('itensPedidoContainer').innerHTML = ''; addLinhaForm(); document.getElementById('modalCadastro').style.display = 'block';
+    document.getElementById('modalTitle').innerText = 'Novo Pedido';
+    document.getElementById('editPedidoId').value = '';
+    document.getElementById('cNome').value = '';
+    document.getElementById('cLogo').value = '';
+    document.getElementById('cApelido').value = '';
+    document.getElementById('cData').value = '';
+    document.getElementById('cSemana').value = '';
+    document.getElementById('cHora').value = '';
+    document.getElementById('cPComprar').checked = false;
+    document.getElementById('cReagendado').checked = false;
+    document.getElementById('cDataReagendado').style.display = 'none';
+    document.getElementById('itensPedidoContainer').innerHTML = '';
+    addLinhaForm();
+    document.getElementById('modalCadastro').style.display = 'block';
   }
   function fecharModal() { document.getElementById('modalCadastro').style.display = 'none'; }
   function updateCores(selectProd) {
@@ -410,10 +531,24 @@
   function setSemana() { const val = document.getElementById('cData').value; if (!val) return; const d = new Date(val + 'T12:00:00'); const dias = ["DOMINGO","SEGUNDA","TERÇA","QUARTA","QUINTA","SEXTA","SÁBADO"]; document.getElementById('cSemana').value = dias[d.getDay()]; }
   function abrirEdicao(pedidoId) {
     const itens = dadosBrutos.filter(p => String(p.ID) === String(pedidoId)); const p = itens[0];
-    document.getElementById('modalTitle').innerText = 'Editando Pedido #' + pedidoId; document.getElementById('editPedidoId').value = pedidoId; document.getElementById('cLoja').value = p.LOJA; document.getElementById('cLocal').value = p.LOCAL; document.getElementById('cLogo').value = p.LOGO; document.getElementById('cNome').value = p.NOME; document.getElementById('cApelido').value = p.APELIDO;
+    document.getElementById('modalTitle').innerText = 'Editando Pedido #' + pedidoId;
+    document.getElementById('editPedidoId').value = pedidoId;
+    document.getElementById('cLoja').value = p.LOJA;
+    document.getElementById('cLocal').value = p.LOCAL;
+    document.getElementById('cLogo').value = p.LOGO;
+    document.getElementById('cNome').value = p.NOME;
+    document.getElementById('cApelido').value = p.APELIDO;
     if (p.DATA) { const d = p.DATA.split('/'); document.getElementById('cData').value = `${d[2]}-${d[1]}-${d[0]}`; }
-    document.getElementById('cSemana').value = p.SEMANA; document.getElementById('cPComprar').checked = p.P_COMPRAR == 'TRUE'; document.getElementById('cReagendado').checked = p.REAGENDADO == 'TRUE'; document.getElementById('cDataReagendado').value = p.DATA_REAGENDADO || ''; toggleReagendado();
-    const container = document.getElementById('itensPedidoContainer'); container.innerHTML = ''; itens.forEach(i => addLinhaForm(i.QTD, i.PRODUTO, i.COR, i.TAMANHO, i.OBS)); document.getElementById('modalCadastro').style.display = 'block';
+    document.getElementById('cSemana').value = p.SEMANA;
+    // Preencher hora do envio na edição
+    document.getElementById('cHora').value = p.HORA || '';
+    document.getElementById('cPComprar').checked = p.P_COMPRAR == 'TRUE';
+    document.getElementById('cReagendado').checked = p.REAGENDADO == 'TRUE';
+    document.getElementById('cDataReagendado').value = p.DATA_REAGENDADO || '';
+    toggleReagendado();
+    const container = document.getElementById('itensPedidoContainer'); container.innerHTML = '';
+    itens.forEach(i => addLinhaForm(i.QTD, i.PRODUTO, i.COR, i.TAMANHO, i.OBS));
+    document.getElementById('modalCadastro').style.display = 'block';
   }
   async function salvar() {
     const btn = document.getElementById('btnSalvar'); const editId = document.getElementById('editPedidoId').value;
@@ -424,8 +559,24 @@
       return { quantidade: row.querySelector('.iQtd').value, produto: row.querySelector('.iProd').value, cor: cor, tamanho: row.querySelector('.iTam').value, obs: row.querySelector('.iObs').value };
     });
     const dataVal = document.getElementById('cData').value; let dataStr = ''; if(dataVal){ const d = dataVal.split('-'); dataStr = `${d[2]}/${d[1]}/${d[0]}`; }
-    const cab = { loja: document.getElementById('cLoja').value, local: document.getElementById('cLocal').value, logo: document.getElementById('cLogo').value, nome: nome, apelido: apelido, data: dataStr, semana: document.getElementById('cSemana').value, hora: new Date().toLocaleTimeString('pt-BR').substring(0, 5), pComprar: document.getElementById('cPComprar').checked, reagendado: document.getElementById('cReagendado').checked, dataReagendado: document.getElementById('cDataReagendado').value };
-    btn.disabled = true; btn.innerText = '⏳...'; await fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: editId ? 'editarPedido' : 'salvarPedido', pedidoId: editId, cabecalho: cab, itens: itens }) });
+    // Usa a hora do campo ou gera automaticamente se vazio
+    const horaInput = document.getElementById('cHora').value;
+    const horaFinal = horaInput || new Date().toLocaleTimeString('pt-BR').substring(0, 5);
+    const cab = {
+      loja: document.getElementById('cLoja').value,
+      local: document.getElementById('cLocal').value,
+      logo: document.getElementById('cLogo').value,
+      nome: nome,
+      apelido: apelido,
+      data: dataStr,
+      semana: document.getElementById('cSemana').value,
+      hora: horaFinal,
+      pComprar: document.getElementById('cPComprar').checked,
+      reagendado: document.getElementById('cReagendado').checked,
+      dataReagendado: document.getElementById('cDataReagendado').value
+    };
+    btn.disabled = true; btn.innerText = '⏳...';
+    await fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: editId ? 'editarPedido' : 'salvarPedido', pedidoId: editId, cabecalho: cab, itens: itens }) });
     fecharModal(); btn.disabled = false; btn.innerText = '💾 SALVAR'; setTimeout(carregar, 1500);
   }
   function atualizar(row, campo, val) { fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'atualizarStatus', rowIndex: row, campo: campo, valor: val }) }).then(() => setTimeout(carregar, 1000)); }
@@ -437,4 +588,4 @@
 </script>
 </body>
 </html>
-<!-- oi -->
+
