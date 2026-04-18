@@ -119,7 +119,7 @@
 
     /* MODAL DE IMPRESSÃO */
     #modalImpressao { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9999; backdrop-filter: blur(8px); }
-    .print-body { background: #fff; color: #000; width: 95%; max-width: 700px; margin: 20px auto; padding: 30px; border-radius: 20px; max-height: 90vh; overflow-y: auto; box-sizing: border-box; }
+    .print-body { background: #fff; color: #000; width: 95%; max-width: 800px; margin: 20px auto; padding: 30px; border-radius: 20px; max-height: 90vh; overflow-y: auto; box-sizing: border-box; }
     @media print {
       body * { visibility: hidden; }
       #areaPrint, #areaPrint * { visibility: visible; }
@@ -175,7 +175,12 @@
         <button class="btn btn-clear" onclick="limpar()">🧹 LIMPAR</button>
       </div>
     </div>
-    <button class="btn btn-massa" id="btnMassaComprado" onclick="marcarTodosComprados()">✅ MARCAR TODOS COMO COMPRADOS</button>
+    
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
+        <button class="btn btn-massa" id="btnMassaComprado" style="margin:0;" onclick="marcarTodosComprados()">✅ MARCAR TODOS COMO COMPRADOS</button>
+        <button class="btn" style="background:#28a745; color:white; font-weight:800;" onclick="abrirImpressaoGeral()">🖨️ IMPRIMIR LISTA GERAL</button>
+    </div>
+    
     <button class="btn btn-add" id="btnAddPedido" onclick="abrirModal()">🚀 CADASTRAR NOVA VENDA</button>
   </div>
 
@@ -253,7 +258,7 @@
   <div class="print-body">
     <div id="areaPrint">
       <div style="text-align:center; margin-bottom:20px; border-bottom:2px solid #000; padding-bottom:15px;">
-        <h2 id="printTitulo" style="margin:0; font-size:18px; font-weight:800;"></h2>
+        <h2 id="printTitulo" style="margin:0; font-size:18px; font-weight:800;">LISTA CONSOLIDADA DE PRODUÇÃO</h2>
         <p id="printSubtitulo" style="margin:5px 0 0 0; font-size:12px; color:#555;"></p>
       </div>
       <table id="printTabela" style="width:100%; border-collapse:collapse; font-family:'Poppins',sans-serif;">
@@ -299,16 +304,17 @@
     }
 
     try {
+      // CORREÇÃO LOGIN: Usar action 'login' conforme definido no doPost do .gs
       const script = document.createElement('script');
-      script.src = WEB_APP_URL + `?action=login_check&user=${user}&pass=${pass}&callback=handleLogin`;
+      script.src = WEB_APP_URL + `?action=login&usuario=${user}&senha=${pass}&callback=handleLogin`;
       document.body.appendChild(script);
     } catch (e) { alert('Erro de conexão.'); btn.innerText = 'ENTRAR'; }
   }
 
   window.handleLogin = function(res) {
-    if (res && res.success) {
+    if (res && res.status === 'success' && res.data && res.data.success) {
       localStorage.setItem('crm_user', document.getElementById('inputUser').value);
-      localStorage.setItem('crm_master', res.master ? 'true' : 'false');
+      localStorage.setItem('crm_master', res.data.master ? 'true' : 'false');
       entrarNoSistema();
     } else {
       alert('Usuário ou Senha incorretos!');
@@ -344,8 +350,10 @@
   }
   window.handleUsers = function(res) {
     const area = document.getElementById('listaUsuariosArea'); area.innerHTML = '<h4 style="margin:20px 0 10px 0">Usuários Cadastrados:</h4>';
-    if (res && res.length > 0) {
-      res.forEach(u => {
+    // Ajuste para lidar com retorno do getUsuarios
+    const usuarios = (res && res.status === 'success') ? res.data : (Array.isArray(res) ? res : []);
+    if (usuarios.length > 0) {
+      usuarios.forEach(u => {
         area.innerHTML += `<div class="user-list-item"><span><strong>${u.usuario}</strong></span><div><button class="btn-user-action btn-user-edit" onclick="prepararEdicaoUser('${u.usuario}', '${u.senha}')">✏️</button><button class="btn-user-action btn-user-delete" onclick="excluirUsuario('${u.usuario}')">🗑️</button></div></div>`;
       });
     } else { area.innerHTML += '<p>Nenhum usuário cadastrado.</p>'; }
@@ -372,7 +380,6 @@
     abaAtual = aba;
     document.getElementById('tabAtivos').classList.toggle('active', aba === 'ATIVOS');
     document.getElementById('tabEnviados').classList.toggle('active', aba === 'ENVIADOS');
-    // Atualiza o título da lista conforme a aba
     document.getElementById('tituloLista').innerText = aba === 'ENVIADOS' ? 'PEDIDOS ENVIADOS' : 'PEDIDOS ATIVOS';
     carregar();
   }
@@ -389,7 +396,12 @@
   }
 
   function carregar() { document.getElementById('listaPedidos').innerHTML = '<div class="msg-vazio">Sincronizando...</div>'; const script = document.createElement('script'); script.src = WEB_APP_URL + '?action=getDados&tipo=' + abaAtual + '&callback=handleResponse'; document.body.appendChild(script); }
-  window.handleResponse = function(res) { if (res && res.pedidos) { dadosBrutos = res.pedidos; renderizar(res.pedidos, res.kpis); } };
+  window.handleResponse = function(res) { 
+    // Ajuste para lidar com retorno do getDados
+    const pedidos = (res && res.status === 'success') ? res.data.pedidos : (res && res.pedidos ? res.pedidos : []);
+    const kpis = (res && res.status === 'success') ? res.data.kpis : (res && res.kpis ? res.kpis : null);
+    if (pedidos) { dadosBrutos = pedidos; renderizar(pedidos, kpis); } 
+  };
   
   function renderizar(pedidos, kpis) {
     filtradosAtuais = pedidos; toggleBotaoMassa();
@@ -409,7 +421,6 @@
       const itens = grupos[id]; const p = itens[0]; 
       
       let statusClass = '';
-      // Classe de transparência para pedidos enviados
       let enviadoClass = (abaAtual === 'ENVIADOS') ? 'card-enviado' : '';
 
       if (abaAtual === 'ATIVOS') {
@@ -422,17 +433,11 @@
       }
       
       let pendente = !p.DATA || itens.some(i => !i.PRODUTO || !i.COR);
-
-      // Hora do envio no card
       const horaEnvio = p.HORA ? `<div class="data-label" style="margin-top:4px;">HORA ENVIO</div><div class="data-value" style="font-size:11px;">${p.HORA}</div>` : '';
-
-      // Nome da logo aumentado no card principal
       const logoNome = `<div class="data-value" style="font-size:14px; font-weight:800;">${p.LOGO}</div>`;
-
-      // Agrupamento de itens iguais (mesmo produto + cor + tamanho)
       const itensAgrupados = agruparItens(itens);
 
-      container.innerHTML += `<div class="order-card ${statusClass} ${enviadoClass}"><button class="btn-delete-order" onclick="excluirPedido('${id}')">🗑️</button><div class="order-header-centered">PEDIDO #${id}</div><div class="card-main-row"><div><div class="data-label">ORIGEM / LOGO</div><div class="data-value">${p.LOJA} • ${p.LOCAL}</div>${logoNome}${pendente ? '<div class="alert-pendente">⚠️ DADOS PENDENTES</div>' : ''}</div><div><div class="data-label">CLIENTE</div><div class="data-value" style="font-size:14px;">${p.NOME}</div><div class="data-label" style="margin-top:2px;">REF: ${p.APELIDO}</div></div><div><div class="data-label">ENTREGA</div><div class="data-value" style="font-size:13px;">${p.DATA || '---'}</div><div class="data-label" style="font-size:9px;">${p.SEMANA || '---'}</div>${horaEnvio}${p.REAGENDADO == 'TRUE' ? `<div class="reagendado-tag">🗓️ ${p.DATA_REAGENDADO}</div>` : ''}</div><div class="status-box">${chk(p.rowIndex, 'COMPRADO', p.COMPRADO)}${chk(p.rowIndex, 'MATRIZ', p.MATRIZ)}${chk(p.rowIndex, 'AMOSTRA', p.AMOSTRA)}${chk(p.rowIndex, 'APROVADO', p.APROVADO)}</div><div class="status-box">${chk(p.rowIndex, 'EM_PRODUCAO', p.EM_PRODUCAO)}${chk(p.rowIndex, 'PRODUZIDO', p.PRODUZIDO)}${chk(p.rowIndex, 'ETIQ_LIBERADA', p.ETIQ_LIBERADA)}${chk(p.rowIndex, 'ENVIADO', p.ENVIADO)}</div><div class="card-actions-right"><div class="chk-item" style="margin-bottom:3px;"><span style="color:#007bff; font-weight:800; font-size:9px;">P/ COMPRAR</span><input type="checkbox" ${p.P_COMPRAR == 'TRUE' ? 'checked' : ''} onchange="atualizar(${p.rowIndex}, 'P_COMPRAR', this.checked)"></div><div class="chk-item" style="margin-bottom:3px;"><span style="color:#fd7e14; font-weight:800; font-size:9px;">REAGENDADO</span><input type="checkbox" ${p.REAGENDADO == 'TRUE' ? 'checked' : ''} onchange="promptReagendar(${p.rowIndex}, this.checked)"></div><div style="display:flex; gap:5px;"><button class="btn-card-right" style="background:#007bff; color:white;" onclick="abrirEdicao('${id}')">✏️ EDITAR</button><button class="btn-card-right" style="background:var(--accent); color:white;" onclick="duplicarPedido('${id}')">📋 CLONAR</button></div><button class="btn-card-right" style="background:#28a745; color:white; margin-top:3px;" onclick="abrirImpressao('${id}')">🖨️ IMPRIMIR</button></div></div><div class="items-table-area"><table style="width:100%; border-collapse: collapse;"><thead><tr style="font-size:9px; opacity:0.7; text-align:left; border-bottom: 1px solid var(--border-color);"><th style="padding-bottom:4px;">QTD</th><th style="padding-bottom:4px;">PRODUTO</th><th style="padding-bottom:4px;">COR</th><th style="padding-bottom:4px;">TAM</th></tr></thead><tbody>${itensAgrupados.map(i => `<tr style="border-bottom: 1px solid var(--border-color);"><td style="font-size:11px; font-weight:800; padding:4px 0;">${i.QTD}</td><td style="font-size:11px; font-weight:700;">${i.PRODUTO || '---'}</td><td style="font-size:11px; font-weight:800;"><span class="color-text color-${getColorKey(i.COR)}">${i.COR || '---'}</span></td><td style="font-size:11px; font-weight:800;">${i.TAMANHO}</td></tr>`).join('')}</tbody></table><div style="position:relative; background:rgba(0,0,0,0.05); border-radius:10px; padding:8px; font-size:11px; border:1px solid var(--border-color);"><div style="position:absolute; top:-6px; left:8px; background:var(--bg-card); font-size:7px; padding:0 4px; font-weight:800; color:var(--accent);">OBS</div>${p.OBS || 'Sem anotações.'}</div></div></div>`;
+      container.innerHTML += `<div class="order-card ${statusClass} ${enviadoClass}"><button class="btn-delete-order" onclick="excluirPedido('${id}')">🗑️</button><div class="order-header-centered">PEDIDO #${id}</div><div class="card-main-row"><div><div class="data-label">ORIGEM / LOGO</div><div class="data-value">${p.LOJA} • ${p.LOCAL}</div>${logoNome}${pendente ? '<div class="alert-pendente">⚠️ DADOS PENDENTES</div>' : ''}</div><div><div class="data-label">CLIENTE</div><div class="data-value" style="font-size:14px;">${p.NOME}</div><div class="data-label" style="margin-top:2px;">REF: ${p.APELIDO}</div></div><div><div class="data-label">ENTREGA</div><div class="data-value" style="font-size:13px;">${p.DATA || '---'}</div><div class="data-label" style="font-size:9px;">${p.SEMANA || '---'}</div>${horaEnvio}${p.REAGENDADO == 'TRUE' ? `<div class="reagendado-tag">🗓️ ${p.DATA_REAGENDADO}</div>` : ''}</div><div class="status-box">${chk(p.rowIndex, 'COMPRADO', p.COMPRADO)}${chk(p.rowIndex, 'MATRIZ', p.MATRIZ)}${chk(p.rowIndex, 'AMOSTRA', p.AMOSTRA)}${chk(p.rowIndex, 'APROVADO', p.APROVADO)}</div><div class="status-box">${chk(p.rowIndex, 'EM_PRODUCAO', p.EM_PRODUCAO)}${chk(p.rowIndex, 'PRODUZIDO', p.PRODUZIDO)}${chk(p.rowIndex, 'ETIQ_LIBERADA', p.ETIQ_LIBERADA)}${chk(p.rowIndex, 'ENVIADO', p.ENVIADO)}</div><div class="card-actions-right"><div class="chk-item" style="margin-bottom:3px;"><span style="color:#007bff; font-weight:800; font-size:9px;">P/ COMPRAR</span><input type="checkbox" ${p.P_COMPRAR == 'TRUE' ? 'checked' : ''} onchange="atualizar(${p.rowIndex}, 'P_COMPRAR', this.checked)"></div><div class="chk-item" style="margin-bottom:3px;"><span style="color:#fd7e14; font-weight:800; font-size:9px;">REAGENDADO</span><input type="checkbox" ${p.REAGENDADO == 'TRUE' ? 'checked' : ''} onchange="promptReagendar(${p.rowIndex}, this.checked)"></div><div style="display:flex; gap:5px;"><button class="btn-card-right" style="background:#007bff; color:white;" onclick="abrirEdicao('${id}')">✏️ EDITAR</button><button class="btn-card-right" style="background:var(--accent); color:white;" onclick="duplicarPedido('${id}')">📋 CLONAR</button></div></div></div><div class="items-table-area"><table style="width:100%; border-collapse: collapse;"><thead><tr style="font-size:9px; opacity:0.7; text-align:left; border-bottom: 1px solid var(--border-color);"><th style="padding-bottom:4px;">QTD</th><th style="padding-bottom:4px;">PRODUTO</th><th style="padding-bottom:4px;">COR</th><th style="padding-bottom:4px;">TAM</th></tr></thead><tbody>${itensAgrupados.map(i => `<tr style="border-bottom: 1px solid var(--border-color);"><td style="font-size:11px; font-weight:800; padding:4px 0;">${i.QTD}</td><td style="font-size:11px; font-weight:700;">${i.PRODUTO || '---'}</td><td style="font-size:11px; font-weight:800;"><span class="color-text color-${getColorKey(i.COR)}">${i.COR || '---'}</span></td><td style="font-size:11px; font-weight:800;">${i.TAMANHO}</td></tr>`).join('')}</tbody></table><div style="position:relative; background:rgba(0,0,0,0.05); border-radius:10px; padding:8px; font-size:11px; border:1px solid var(--border-color);"><div style="position:absolute; top:-6px; left:8px; background:var(--bg-card); font-size:7px; padding:0 4px; font-weight:800; color:var(--accent);">OBS</div>${p.OBS || 'Sem anotações.'}</div></div></div>`;
     }
   }
 
@@ -440,7 +445,7 @@
   function agruparItens(itens) {
     const mapa = {};
     itens.forEach(i => {
-      const chave = `${(i.PRODUTO||'').trim()}|${(i.COR||'').trim()}|${(i.TAMANHO||'').trim()}`;
+      const chave = `${(i.PRODUTO||'').trim().toUpperCase()}|${(i.COR||'').trim().toUpperCase()}|${(i.TAMANHO||'').trim().toUpperCase()}`;
       if (!mapa[chave]) {
         mapa[chave] = { QTD: 0, PRODUTO: i.PRODUTO, COR: i.COR, TAMANHO: i.TAMANHO };
       }
@@ -449,25 +454,31 @@
     return Object.values(mapa);
   }
 
-  // Função para abrir o modal de impressão com itens agrupados
-  function abrirImpressao(pedidoId) {
-    const itens = dadosBrutos.filter(p => String(p.ID) === String(pedidoId));
-    if (!itens.length) return;
-    const p = itens[0];
-    document.getElementById('printTitulo').innerText = `PEDIDO #${pedidoId} — ${p.NOME}`;
-    document.getElementById('printSubtitulo').innerText = `Logo: ${p.LOGO} | Entrega: ${p.DATA || '---'} ${p.HORA ? '| Hora: ' + p.HORA : ''} | Ref: ${p.APELIDO}`;
+  // IMPRESSÃO GERAL CONSOLIDADA
+  function abrirImpressaoGeral() {
+    if (!filtradosAtuais || filtradosAtuais.length === 0) return alert('Nenhum pedido para imprimir.');
     
-    const agrupados = agruparItens(itens);
-    const totalPecas = agrupados.reduce((acc, i) => acc + i.QTD, 0);
+    // Agrupar todos os itens de todos os pedidos filtrados
+    const todosItens = agruparItens(filtradosAtuais);
+    const totalPecas = todosItens.reduce((acc, i) => acc + i.QTD, 0);
+    
+    document.getElementById('printTitulo').innerText = `LISTA CONSOLIDADA — ${abaAtual}`;
+    document.getElementById('printSubtitulo').innerText = `Total de Pedidos: ${new Set(filtradosAtuais.map(p => p.ID)).size} | Data da Impressão: ${new Date().toLocaleDateString('pt-BR')} ${new Date().toLocaleTimeString('pt-BR').substring(0,5)}`;
     
     const corpo = document.getElementById('printCorpo');
     corpo.innerHTML = '';
-    agrupados.forEach((i, idx) => {
+    
+    // Ordenar por produto para facilitar conferência
+    todosItens.sort((a,b) => (a.PRODUTO > b.PRODUTO) ? 1 : -1);
+
+    todosItens.forEach((i, idx) => {
       const tr = document.createElement('tr');
       tr.style.background = idx % 2 === 0 ? '#f9f9f9' : '#ffffff';
-      tr.innerHTML = `<td style="padding:9px 10px; font-size:13px; font-weight:800;">${i.QTD}</td><td style="padding:9px 10px; font-size:12px; font-weight:700;">${i.PRODUTO || '---'}</td><td style="padding:9px 10px; font-size:12px; font-weight:800; text-transform:uppercase;">${i.COR || '---'}</td><td style="padding:9px 10px; font-size:12px; font-weight:800;">${i.TAMANHO || '---'}</td>`;
+      tr.style.borderBottom = '1px solid #ddd';
+      tr.innerHTML = `<td style="padding:12px 10px; font-size:14px; font-weight:800;">${i.QTD}</td><td style="padding:12px 10px; font-size:13px; font-weight:700;">${i.PRODUTO || '---'}</td><td style="padding:12px 10px; font-size:13px; font-weight:800; text-transform:uppercase;">${i.COR || '---'}</td><td style="padding:12px 10px; font-size:13px; font-weight:800;">${i.TAMANHO || '---'}</td>`;
       corpo.appendChild(tr);
     });
+    
     document.getElementById('printTotal').innerText = totalPecas;
     document.getElementById('modalImpressao').style.display = 'block';
   }
@@ -540,7 +551,6 @@
     document.getElementById('cApelido').value = p.APELIDO;
     if (p.DATA) { const d = p.DATA.split('/'); document.getElementById('cData').value = `${d[2]}-${d[1]}-${d[0]}`; }
     document.getElementById('cSemana').value = p.SEMANA;
-    // Preencher hora do envio na edição
     document.getElementById('cHora').value = p.HORA || '';
     document.getElementById('cPComprar').checked = p.P_COMPRAR == 'TRUE';
     document.getElementById('cReagendado').checked = p.REAGENDADO == 'TRUE';
@@ -559,7 +569,6 @@
       return { quantidade: row.querySelector('.iQtd').value, produto: row.querySelector('.iProd').value, cor: cor, tamanho: row.querySelector('.iTam').value, obs: row.querySelector('.iObs').value };
     });
     const dataVal = document.getElementById('cData').value; let dataStr = ''; if(dataVal){ const d = dataVal.split('-'); dataStr = `${d[2]}/${d[1]}/${d[0]}`; }
-    // Usa a hora do campo ou gera automaticamente se vazio
     const horaInput = document.getElementById('cHora').value;
     const horaFinal = horaInput || new Date().toLocaleTimeString('pt-BR').substring(0, 5);
     const cab = {
@@ -588,4 +597,4 @@
 </script>
 </body>
 </html>
-
+<!-- oi -->
